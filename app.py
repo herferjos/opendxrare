@@ -41,7 +41,7 @@ if 'chatbot' not in st.session_state:
 # DEFINIMOS TODAS LAS FUNCIONES NECESARIAS
 
 def extractor(caso_clinico):
-    prompt = """
+    prompt = '''
     CONDICIONES
 
     Usted es un asistente médico para ayudar a extraer síntomas y fenotipos de un caso clínico.
@@ -53,9 +53,9 @@ def extractor(caso_clinico):
 
     FORMATO RESPUESTA:
 
-    python dictionary -> {'symptoms':[]}
+    python dictionary -> {"symptoms":[]}
 
-    """
+    '''
 
     prompt = prompt + f"""Esta es la descripción clínica proporcionada por el usuario: '{caso_clinico}'
 
