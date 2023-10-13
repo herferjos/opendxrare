@@ -64,7 +64,7 @@ def extractor(caso_clinico):
     respuesta = st.session_state.chatbot.query(prompt)['text']
     return respuesta
 
-
+@st.cache_data(show_spinner=False, persist = True)
 def search_database(query):
     k = 5
     query_vector = st.session_state.model.encode(query)
@@ -79,7 +79,8 @@ def search_database(query):
         results.append(result)
 
     return results
-
+    
+@st.cache_data(show_spinner=False, persist = True)
 def selector(respuesta_database, sintoma):
 
     prompt = """
@@ -134,7 +135,8 @@ def get_ranked_list(hpo_ids):
                 ncbi_genes_omim_string = ", ".join([f"[NCBIGene:{ncbi_id.split(':')[1]}](https://www.ncbi.nlm.nih.gov/gene/{ncbi_id.split(':')[1]})" for ncbi_id in ncbi_genes_omim])
             else:
                 ncbi_genes_omim_string = ""
-            omim_gene_reviews_url = f"['Gene Review']({omim_item.get('gene_reviews_url')})"   
+            omim_url = omim_item.get('gene_reviews_url')
+            omim_gene_reviews_url = f"[Gene Review]({omim_url})"   
             omim_inheritance = omim_item.get("inheritance_en")
             if omim_inheritance:
                 omim_inheritance = ", ".join([v for k, v in omim_inheritance.items()])
@@ -156,7 +158,8 @@ def get_ranked_list(hpo_ids):
               ncbi_genes_orpha_string = ", ".join([f"[NCBIGene:{ncbi_id.split(':')[1]}](https://www.ncbi.nlm.nih.gov/gene/{ncbi_id.split(':')[1]})" for ncbi_id in ncbi_genes_orpha])
             else:
               ncbi_genes_orpha_string = ""
-            orpha_gene_reviews_url = f"['Gene Review']({orpha_item.get('gene_reviews_url')})"               
+            orpha_url = orpha_item.get('gene_reviews_url')
+            orpha_gene_reviews_url = f"['Gene Review']({orpha_url})"               
             orpha_inheritance = orpha_item.get("inheritance_en")
             if orpha_inheritance:
                 orpha_inheritance = ", ".join([v for k, v in orpha_inheritance.items()])
@@ -181,7 +184,7 @@ def get_ranked_list(hpo_ids):
 
     return df, lista_diseases_id
 
-
+@st.cache_data(show_spinner=False, persist = True)
 def orchest(description):
     respuesta = extractor(description)
     diccionario = json.loads(respuesta)
