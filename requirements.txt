@@ -2,3 +2,4 @@ streamlit
 sentence-transformers
 faiss-cpu
 hugchat
+tabulate
