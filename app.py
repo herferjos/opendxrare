@@ -10,33 +10,27 @@ import requests
 import pandas as pd
 import json
 import os
+import glob
 
 # INICIAMOS TODAS LAS VARIABLES ESTÁTICAS NECESARIAS
 
 if 'model' not in st.session_state:
     st.session_state['model'] = SentenceTransformer('joseluhf11/symptom_encoder')
 
-    if 'index_database' not in st.session_state:
-           
-    # Directorio donde se encuentran los trozos
-    input_dir = 'file_chunks/'
-    
-    # Nombre de los archivos originales
-    file = 'index.faiss'
-    
-    # Función para reconstruir un archivo a partir de los trozos
-    def join_files(input_dir, output_file):
-        with open(output_file, 'wb') as f:
-            for root, _, files in os.walk(input_dir):
-                for file_name in sorted(files):
-                    file_path = os.path.join(root, file_name)
-                    with open(file_path, 'rb') as chunk_file:
-                        chunk = chunk_file.read()
-                        f.write(chunk)
-    
-    join_files(input_dir, file)
-    
-    st.session_state['index_database'] = faiss.read_index("vector_database/index.faiss")
+if 'index_database' not in st.session_state:
+
+    # Lista de archivos de trozos en la carpeta
+    chunk_files = sorted(glob.glob(os.path.join('vector_database/', '????_index.faiss')))
+
+    # Crear un índice en faiss
+    index = faiss.IndexFlatL2(768)
+
+    # Fusionar los trozos en el índice
+    for chunk_file in chunk_files:
+        chunk = faiss.read_index(chunk_file)
+        index.merge_from(chunk)
+
+    st.session_state['index_database'] = index
 
 if 'texts_database' not in st.session_state:
     with open('vector_database/texts.pkl', 'rb') as f:
