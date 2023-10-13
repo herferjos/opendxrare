@@ -60,7 +60,9 @@ def extractor(caso_clinico):
 
     Recuerda SOLO contestar con el diccionario, nada más
     """
-    return st.session_state.chatbot.query(prompt)['text']
+    respuesta = st.session_state.chatbot.query(prompt)['text']
+    print(respuesta)
+    return respuesta
 
 
 def search_database(query):
