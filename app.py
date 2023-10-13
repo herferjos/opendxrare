@@ -17,13 +17,20 @@ if 'model' not in st.session_state:
     st.session_state['model'] = SentenceTransformer('joseluhf11/symptom_encoder')
 
 if 'index_database' not in st.session_state:
-    
+       
+    # Lista de archivos de trozos en la carpeta
     chunk_files = sorted(glob.glob(os.path.join('vector_database/', '????_index.faiss'))
-    index = faiss.IndexFlatL2(768)
     
+    # Crear un índice en Faiss
+    index = None
+    
+    # Reconstruir el índice a partir de los trozos
     for chunk_file in chunk_files:
         chunk = faiss.read_index(chunk_file)
-        index.merge_from(chunk)
+        if index is None:
+            index = chunk
+        else:
+            index.merge_from(chunk)
                     
     st.session_state['index_database'] = index
 
