@@ -130,7 +130,7 @@ def get_ranked_list(hpo_ids):
             omim_id = omim_item.get("id")
             omim_id_string = f"[{omim_id}](https://omim.org/entry/{omim_id.split(':')[1]})"
             omim_name = omim_item.get("omim_disease_name_en").capitalize()
-            omim_mondo_id = omim_item.get("mondo_id")
+            omim_mondo_id = ", ".join(omim_item.get("mondo_id", []))
             omim_mondo_id_string = f"[{omim_mondo_id}](https://monarchinitiative.org/disease/{omim_mondo_id})"
             omim_score = omim_item.get("score")
             omim_description = omim_item.get("description")
