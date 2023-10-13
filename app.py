@@ -127,7 +127,7 @@ def get_ranked_list(hpo_ids):
             omim_mondo_id_string = f"[{omim_mondo_id}](https://monarchinitiative.org/disease/{omim_mondo_id})"
             omim_score = omim_item.get("score")
             omim_description = omim_item.get("description")
-            omim_matched_hpo_id = orpha_item.get("matched_hpo_id")
+            omim_matched_hpo_id = omim_item.get("matched_hpo_id")
             omim_matched_hpo_id_string = ", ".join([f"[{codigo}](https://monarchinitiative.org/phenotype/{codigo})" for codigo in omim_matched_hpo_id.split(',')])
             ncbi_genes_omim = omim_item.get("ncbi_gene_id")
             if ncbi_genes_omim is not None:
@@ -166,7 +166,8 @@ def get_ranked_list(hpo_ids):
     orpha_df = pd.DataFrame(orpha_data, columns=["ID", "MONDO ID", "Disease", "Score", "Description", "Shared Phenotypes", "Associated Genes", "Gene Reviews URL", "Inheritance"])
     
     df = pd.concat([omim_df, orpha_df], axis=0, ignore_index=True)
-    
+    df['Score'] = df['Score'].astype(float)
+
     # Remove duplicates based on MONDO ID and keep the row with the highest score
     df = df.sort_values(by=["MONDO ID", "Score"], ascending=[True, False])
     df = df.drop_duplicates(subset=["MONDO ID"], keep="first")
