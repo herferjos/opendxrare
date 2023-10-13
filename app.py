@@ -17,15 +17,15 @@ if 'model' not in st.session_state:
     st.session_state['model'] = SentenceTransformer('joseluhf11/symptom_encoder')
 
 if 'index_database' not in st.session_state:
-    with open("index.faiss", 'wb') as f:
-        for root, _, files in os.walk("vector_database/"):
-            for file_name in sorted(files):
-                file_path = os.path.join(root, file_name)
-                with open("vector_database/index.faiss", 'rb') as chunk_file:
-                    chunk = chunk_file.read()
-                    f.write(chunk)
+    
+    chunk_files = sorted(glob.glob(os.path.join('vector_database/', '????_index.faiss'))
+    index = faiss.IndexFlatL2(768)
+    
+    for chunk_file in chunk_files:
+        chunk = faiss.read_index(chunk_file)
+        index.merge_from(chunk)
                     
-    st.session_state['index_database'] = faiss.read_index("vector_database/index.faiss")
+    st.session_state['index_database'] = index
 
 if 'texts_database' not in st.session_state:
     with open('vector_database/texts.pkl', 'rb') as f:
