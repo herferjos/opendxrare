@@ -11,7 +11,7 @@ import pandas as pd
 import json
 import os
 import glob
-
+import tabulate
 
 # INICIAMOS TODAS LAS VARIABLES ESTÁTICAS NECESARIAS
 
