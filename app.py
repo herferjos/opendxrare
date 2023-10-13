@@ -75,7 +75,7 @@ def search_database(query):
     # Obtener los ID y Texts correspondientes a los vectores encontrados con mayor similaridad al texto de input usando ids_texts como antes
     results = []
     for i in range(k):
-        result = {"ID": st.session_state.texts[indices[0][i]]["id"], "Text": st.session_state.texts[indices[0][i]]["text"]}
+        result = {"ID": st.session_state.texts_database[indices[0][i]]["id"], "Text": st.session_state.texts_database[indices[0][i]]["text"]}
         results.append(result)
 
     return results
