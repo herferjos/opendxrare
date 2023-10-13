@@ -57,10 +57,10 @@ def extractor(caso_clinico):
 
     '''
 
-    prompt = prompt + f'''Esta es la descripción clínica proporcionada por el usuario: "{caso_clinico}"
+    prompt = prompt + f"""Esta es la descripción clínica proporcionada por el usuario: '{caso_clinico}'
 
-    Recuerda extraer los síntomas médicos y SOLO contestar con el diccionario en python para lo síntomas, nada más -> {"symptoms":[]}
-    '''
+    ¡Recuerda extraer los síntomas médicos y SOLO contestar con el diccionario en python para lo síntomas, nada más!
+    """
     id = st.session_state.chatbot.new_conversation()
     st.session_state.chatbot.change_conversation(id)
     
