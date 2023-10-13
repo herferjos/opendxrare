@@ -34,7 +34,7 @@ if 'texts_database' not in st.session_state:
         st.session_state['texts_database'] = pickle.load(f)
 
 if 'chatbot' not in st.session_state:
-    st.session_state['chatbot'] = hugchat.ChatBot(cookie_path='/content/hugchat_cookies.json')
+    st.session_state['chatbot'] = hugchat.ChatBot(cookie_path='hugchat_cookies.json')
 
 
 # DEFINIMOS TODAS LAS FUNCIONES NECESARIAS
