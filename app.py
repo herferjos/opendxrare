@@ -61,6 +61,9 @@ def extractor(caso_clinico):
 
     Recuerda SOLO contestar con el diccionario, nada más
     """
+    id = st.session_state.chatbot.new_conversation()
+    st.session_state.chatbot.change_conversation(id)
+    
     respuesta = st.session_state.chatbot.query(prompt)['text']
     return respuesta
 
@@ -104,6 +107,9 @@ def selector(respuesta_database, sintoma):
     Esta son las posibilidades que he encontrado: {respuesta_database}
     ¡Recuerda SOLO contestar con el HPO_ID, nada más!
     """
+    id = st.session_state.chatbot.new_conversation()
+    st.session_state.chatbot.change_conversation(id)
+    
     respuesta = st.session_state.chatbot.query(prompt)['text']
     return respuesta
 
