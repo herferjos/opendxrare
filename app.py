@@ -121,7 +121,7 @@ def get_ranked_list(hpo_ids):
         if i < len(omim_response):
             omim_item = omim_response[i]
             omim_id = omim_item.get("id")
-            omim_id_string = f"[{omim_id}](https://omim.org/entry/{omim_id.split(':')})"
+            omim_id_string = f"[{omim_id}](https://omim.org/entry/{omim_id.split(':')[1]})"
             omim_name = omim_item.get("omim_disease_name_en").capitalize()
             omim_mondo_id = omim_item.get("mondo_id")
             omim_mondo_id_string = f"[{omim_mondo_id}](https://monarchinitiative.org/disease/{omim_mondo_id})"
@@ -134,7 +134,7 @@ def get_ranked_list(hpo_ids):
                 ncbi_genes_omim_string = ", ".join([f"[NCBIGene:{ncbi_id.split(':')[1]}](https://www.ncbi.nlm.nih.gov/gene/{ncbi_id.split(':')[1]})" for ncbi_id in ncbi_genes_omim])
             else:
                 ncbi_genes_omim_string = ""
-            omim_gene_reviews_url = f"[Gene Review]({omim_item.get('gene_reviews_url')})"   
+            omim_gene_reviews_url = f"['Gene Review']({omim_item.get('gene_reviews_url')})"   
             omim_inheritance = omim_item.get("inheritance_en")
             if omim_inheritance:
                 omim_inheritance = ", ".join([v for k, v in omim_inheritance.items()])
@@ -143,7 +143,7 @@ def get_ranked_list(hpo_ids):
         if i < len(orpha_response):
             orpha_item = orpha_response[i]
             orpha_id = orpha_item.get("id")
-            orpha_id_string = f"[{orpha_id}](https://www.orpha.net/consor/cgi-bin/OC_Exp.php?Lng=EN&Expert={orpha_id.split(':')})"
+            orpha_id_string = f"[{orpha_id}](https://www.orpha.net/consor/cgi-bin/OC_Exp.php?Lng=EN&Expert={orpha_id.split(':')[1]})"
             orpha_name = orpha_item.get("orpha_disease_name_en").capitalize()
             orpha_mondo_id = ", ".join(orpha_item.get("mondo_id", []))
             orpha_mondo_id_string = f"[{orpha_mondo_id}](https://monarchinitiative.org/disease/{orpha_mondo_id})"
@@ -156,7 +156,7 @@ def get_ranked_list(hpo_ids):
               ncbi_genes_orpha_string = ", ".join([f"[NCBIGene:{ncbi_id.split(':')[1]}](https://www.ncbi.nlm.nih.gov/gene/{ncbi_id.split(':')[1]})" for ncbi_id in ncbi_genes_orpha])
             else:
               ncbi_genes_orpha_string = ""
-            orpha_gene_reviews_url = f"[Gene Review]({orpha_item.get('gene_reviews_url')})"               
+            orpha_gene_reviews_url = f"['Gene Review']({orpha_item.get('gene_reviews_url')})"               
             orpha_inheritance = orpha_item.get("inheritance_en")
             if orpha_inheritance:
                 orpha_inheritance = ", ".join([v for k, v in orpha_inheritance.items()])
