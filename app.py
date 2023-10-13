@@ -19,13 +19,13 @@ if 'model' not in st.session_state:
 
 if 'index_database' not in st.session_state:
 
-with open("index.faiss", 'wb') as f:
-    for root, _, files in os.walk("vector_database/"):
-        for file_name in sorted(files):
-            file_path = os.path.join(root, file_name)
-            with open(file_path, 'rb') as chunk_file:
-                chunk = chunk_file.read()
-                f.write(chunk)
+    with open("index.faiss", 'wb') as f:
+        for root, _, files in os.walk("vector_database/"):
+            for file_name in sorted(files):
+                file_path = os.path.join(root, file_name)
+                with open(file_path, 'rb') as chunk_file:
+                    chunk = chunk_file.read()
+                    f.write(chunk)
 
     st.session_state['index_database'] = faiss.read_index("index.faiss")
 
