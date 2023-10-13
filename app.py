@@ -168,11 +168,11 @@ def get_ranked_list(hpo_ids):
     df = pd.concat([omim_df, orpha_df], axis=0, ignore_index=True)
     
     # Remove duplicates based on MONDO ID and keep the row with the highest score
-    df = df.sort_values(by=["MONDO ID", "Puntuación"], ascending=[True, False])
+    df = df.sort_values(by=["MONDO ID", "Score"], ascending=[True, False])
     df = df.drop_duplicates(subset=["MONDO ID"], keep="first")
     
     # Get the top 10 rows based on score
-    df = df.nlargest(5, "Puntuación")
+    df = df.nlargest(5, "Score")
     df = df.reset_index(drop=True)
 
 
