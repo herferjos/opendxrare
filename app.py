@@ -166,15 +166,15 @@ def get_ranked_list(hpo_ids):
     orpha_df = pd.DataFrame(orpha_data, columns=["ID", "MONDO ID", "Disease", "Score", "Description", "Shared Phenotypes", "Associated Genes", "Gene Reviews URL", "Inheritance"])
     
     df = pd.concat([omim_df, orpha_df], axis=0, ignore_index=True)
-    df['Score'] = df['Score'].astype(float)
+    # df['Score'] = df['Score'].astype(float)
 
     # Remove duplicates based on MONDO ID and keep the row with the highest score
     df = df.sort_values(by=["MONDO ID", "Score"], ascending=[True, False])
     df = df.drop_duplicates(subset=["MONDO ID"], keep="first")
     
     # Get the top 10 rows based on score
-    df = df.nlargest(5, "Score")
-    df = df.reset_index(drop=True)
+    # df = df.nlargest(5, "Score")
+    # df = df.reset_index(drop=True)
 
 
     lista_diseases_id = df.iloc[:, 1].tolist()
@@ -201,6 +201,7 @@ def orchest(description):
 
 # ----------------------------------------------- FRONTED STREAMLIT APP ------------------------------------------------------------------------------------
 
+st.set_page_config(page_title="OpenDxRare", page_icon="🧬", layout="wide")
 
 st.title("Prueba")
 
