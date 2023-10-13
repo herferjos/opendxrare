@@ -200,6 +200,9 @@ def orchest(description):
 
 st.title("Prueba")
 
-respuesta = orchest(st.text_input(label = "Descripcion"))
+descripcion = st.text_input(label = "Descripcion")
 
-st.markdown(respuesta[0].to_markdown(index=False), unsafe_allow_html=True)
+if st.button(label = "Enviar")
+    respuesta = orchest(descripcion)
+    
+    st.markdown(respuesta[0].to_markdown(index=False), unsafe_allow_html=True)
