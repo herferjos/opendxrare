@@ -134,13 +134,11 @@ def get_ranked_list(hpo_ids):
             if ncbi_genes_omim is not None:
                 ncbi_genes_omim_string = ", ".join([f"[NCBIGene:{ncbi_id.split(':')[1]}](https://www.ncbi.nlm.nih.gov/gene/{ncbi_id.split(':')[1]})" for ncbi_id in ncbi_genes_omim])
             else:
-                ncbi_genes_omim_string = ""
-            omim_url = omim_item.get('gene_reviews_url')
-            omim_gene_reviews_url = f"[Gene Review]({omim_url})"   
+                ncbi_genes_omim_string = "" 
             omim_inheritance = omim_item.get("inheritance_en")
             if omim_inheritance:
                 omim_inheritance = ", ".join([v for k, v in omim_inheritance.items()])
-            omim_data.append([omim_id_string, omim_mondo_id_string, omim_name, omim_score, omim_description, omim_matched_hpo_id_string, ncbi_genes_omim_string, omim_gene_reviews_url, omim_inheritance])
+            omim_data.append([omim_id_string, omim_mondo_id_string, omim_name, omim_score, omim_description, omim_matched_hpo_id_string, ncbi_genes_omim_string, omim_inheritance])
         
         if i < len(orpha_response):
             orpha_item = orpha_response[i]
@@ -157,16 +155,14 @@ def get_ranked_list(hpo_ids):
             if ncbi_genes_orpha is not None:
               ncbi_genes_orpha_string = ", ".join([f"[NCBIGene:{ncbi_id.split(':')[1]}](https://www.ncbi.nlm.nih.gov/gene/{ncbi_id.split(':')[1]})" for ncbi_id in ncbi_genes_orpha])
             else:
-              ncbi_genes_orpha_string = ""
-            orpha_url = orpha_item.get('gene_reviews_url')
-            orpha_gene_reviews_url = f"['Gene Review']({orpha_url})"               
+              ncbi_genes_orpha_string = ""         
             orpha_inheritance = orpha_item.get("inheritance_en")
             if orpha_inheritance:
                 orpha_inheritance = ", ".join([v for k, v in orpha_inheritance.items()])
-            orpha_data.append([orpha_id_string, orpha_mondo_id_string, orpha_name, orpha_score, orpha_description, orpha_matched_hpo_id_string, ncbi_genes_orpha_string, orpha_gene_reviews_url, orpha_inheritance])
+            orpha_data.append([orpha_id_string, orpha_mondo_id_string, orpha_name, orpha_score, orpha_description, orpha_matched_hpo_id_string, ncbi_genes_orpha_string, orpha_inheritance])
     
-    omim_df = pd.DataFrame(omim_data, columns=["ID", "MONDO ID", "Disease", "Score", "Description", "Shared Phenotypes", "Associated Genes", "Gene Reviews URL", "Inheritance"])
-    orpha_df = pd.DataFrame(orpha_data, columns=["ID", "MONDO ID", "Disease", "Score", "Description", "Shared Phenotypes", "Associated Genes", "Gene Reviews URL", "Inheritance"])
+    omim_df = pd.DataFrame(omim_data, columns=["ID", "MONDO ID", "Disease", "Score", "Description", "Shared Phenotypes", "Associated Genes", "Inheritance"])
+    orpha_df = pd.DataFrame(orpha_data, columns=["ID", "MONDO ID", "Disease", "Score", "Description", "Shared Phenotypes", "Associated Genes", "Inheritance"])
     
     df = pd.concat([omim_df, orpha_df], axis=0, ignore_index=True)
     df['Score'] = df['Score'].astype(float)
