@@ -211,40 +211,28 @@ if st.button(label = "Enviar"):
     
     st.markdown(respuesta[0].to_markdown(index=False), unsafe_allow_html=True)
 
-# prompt_prueba = """
+prompt_prueba = """
 
-# CONDICIONES
+CONDICIONES
 
-# Usted es un asistente médico para ayudar a extraer síntomas y fenotipos de un caso clínico.
-# Sea preciso y no alucine con la información.
+Usted es un asistente médico para ayudar a extraer síntomas y fenotipos de un caso clínico.
+Sea preciso y no alucine con la información.
 
-# MISIÓN
+MISIÓN
 
-# Generar un diccionario en python que recoja los síntomas clínicos mencionados.
+Generar un diccionario en python que recoja los síntomas clínicos mencionados.
 
-# FORMATO RESPUESTA:
+FORMATO RESPUESTA:
 
-# python dictionary -> {'symptoms':[]}
+python dictionary -> {'symptoms':[]}
 
-# Esta es la descripción clínica proporcionada por el usuario: '
-# An 8 yr old boy was referred to Pediatrics Neurologic Clinic Mashhad, Iran; due to developmental delay and seizure attacks from 6 yr ago. He was the second child of non relative healthy parents; there was no evidence of seizure or mental retardation in his family. He was born at term by a vaginal delivery with normal APGAR score and birth weight. He had a history of neonatal icterus and phototherapy.
+Esta es la descripción clínica proporcionada por el usuario: '
+A 2‐year‐old male patient presented to our center with chief complaints of abnormal body movement for 3 days and on/off fever for 2 days. He also had urinary incontinence. On examination, he was ill‐looking, unresponsive, and not well oriented to time, place, and person. He had up rolled eyes with vacant stare, open mouth, drooling of saliva, stiffening, and abnormal movement of right upper and lower limb. On general physical examination, he had pallor. He had no rashes, petechiae, purpura or bruises, icterus, lymphadenopathy, cyanosis, clubbing, edema, and dehydration.  Physical examination revealed heart rate of 142 beats per minutes, respiratory rate of 28 breaths per minute, blood pressure of 100/70 mm of Hg, temperature of 100.20F, and oxygen saturation of 99% on oxygen facemask maintained at the rate of 4 L/min. His airway was patent, and there was no sign of respiratory distress or evidence of trauma. He was admitted to pediatric intensive care unit (PICU) because of status epilepticus and was sedated with midazolam immediately.  On further examination, he had global developmental delay. He had no head control with head being turned to one side, he did not grasp finger or reached for objects, and he recognized his mother and cooed. He had learning difficulty; he was not able to speak words as he should be able to as per his age. He had delayed motor development; he was not able to perform motor activities appropriate for his age. Anthropometry revealed head circumference of 46.5 cm, body weight of 10 kg, and height of 83 cm, of which head circumference and height were lower than expected approximate values.  Ophthalmological examinations were normal with no features of disk edema. His cranial nerves were intact. There were no signs of meningeal irritation. Motor examination revealed increased tone in upper limb, which was relatively high on extension than on flexion. However, increased tone in lower limb was noted that was high on flexion than on extension. Babinski's extensor response was present bilaterally. Other systemic examinations were normal.  Laboratory examination revealed hemoglobin 9.9 g%, packed cell volume 32.9%, total red blood cell count 490,000 cells/mm3, total leukocyte count 3800 cells/mm3 with neutrophils 48%, lymphocytes 42%, monocytes 9%, eosinophil 1%, basophil 0%, platelets 256,000 cells/mm3, urea 5.8 mmol/l, 0.5 creatinine mg/dl, Na+142 mEq/L, K+ 3.8 mEq/L, total protein 70 g/L, and albumin 49 g/L. His random blood glucose and calcium level were 112 mg/dl and 9.6 mg/dl, respectively. C‐reactive protein (CRP) latex was negative. There was no growth of microorganisms in blood after 72 h. Cerebrospinal fluid (CSF) analysis showed total leucocyte count of 8 cells/mm3, protein and glucose levels were within the normal range. Urine analysis had cystine (3+) crystal/hpf.  Interictal electroencephalography (EEG) was done during wakefulness that showed no significant findings. Magnetic resonance imaging (MRI) of the brain showed prominent extra‐axial CSF spaces with proportionate dilatation of the ventricles consistent with global cerebral atrophy (Figure 1). Genetic analysis showed SCN1A gene mutation. The boy is the second child of a non‐consanguineous parent following the first girl child who is healthy. The mother had hydatidiform mole. She had 3 successive spontaneous abortions after the birth of first child. She did not smoke, consumed alcohol, or used illicit or teratogenic drugs during the period of gestation. She had undergone all necessary examination and antenatal visits. He was born at term following emergency cesarean section due to fetal distress. He did not cry at birth. His birthweight and head circumference were normal at the time of birth. He was discharged after 4 days following evaluation and management in the neonatal intensive care unit (NICU). The mother and father were 26 and 38 years old, respectively, at the time of gestation. He has been fully immunized according to the expanded program on immunization (EPI) schedule of Nepal.  The patient had first episode of seizure at 2 months of age. He also had fever after vaccination. He used to have up to 24 episodes of seizure per day. He was on levetiracetam and on a regular follow‐up since then. His developmental milestones were normal till 18 months of age. Later, he lost his head control. He also used to have occasional stiffening of head toward right, abnormal flexion of all limbs, lip smacking, and chewing movement
+'
 
-# He had a happy face and the parents noticed developmental delay at 2 yr old. He was admitted in a hospital because of tonic-colonic seizures and valproate sodium was administered for him. He was able to walk independently at 4 yr old. At the age of 6 yr, he was referred to Children Neurology Department in Mashhad due to hyperactivity, where received risperidone.
+Recuerda SOLO contestar con el diccionario, nada más
+"""
 
-# On physical examination, he had mandibular prognathism, strabismus and unusual laughing facial expression (Figure1). His head circumference was 51 cm.
-
-# Written informed consent was obtained from his parents.
-
-# His walking was unsteady, but muscles tone, force and deep tendon reflexes were normal. Joints range of motion was normal. Besides, he had speech disability and could walk independently, but could not run. He had restricted communicative abilities and suffered from severe mental retardation.
-
-# Laboratory findings were normal. Brain MRI and CBC test were normal. Thyroid function test showed hypothyroidism, controlled by levothyroxine since 2 yr old.
-
-# In our patient, seizure attacks have been continued from the age of 2 yr, despite various pharmacologic treatments.
-# '
-
-# Recuerda SOLO contestar con el diccionario, nada más
-# """
-
-# respuesta = st.session_state.chatbot.query(prompt_prueba)['text']
+respuesta = st.session_state.chatbot.query(prompt_prueba)['text']
 
 # st.write(respuesta)
