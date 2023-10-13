@@ -210,5 +210,4 @@ descripcion = st.text_input(label = "Descripcion")
 
 if st.button(label = "Enviar"):
     respuesta = orchest(descripcion)
-    st.write(respuesta)
     st.markdown(respuesta[0].to_markdown(index=False), unsafe_allow_html=True)
