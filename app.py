@@ -182,8 +182,9 @@ def get_ranked_list(hpo_ids):
 
 
 def orchest(description):
-
-    lista_sintomas = json.loads(extractor(description))['symptoms']
+    respuesta = extractor(description)
+    diccionario = json.loads(respuesta)
+    lista_sintomas = diccionario['symptoms']
 
     lista_codigos = []
 
@@ -209,40 +210,40 @@ if st.button(label = "Enviar"):
     
     st.markdown(respuesta[0].to_markdown(index=False), unsafe_allow_html=True)
 
-prompt_prueba = """
+# prompt_prueba = """
 
-CONDICIONES
+# CONDICIONES
 
-Usted es un asistente médico para ayudar a extraer síntomas y fenotipos de un caso clínico.
-Sea preciso y no alucine con la información.
+# Usted es un asistente médico para ayudar a extraer síntomas y fenotipos de un caso clínico.
+# Sea preciso y no alucine con la información.
 
-MISIÓN
+# MISIÓN
 
-Generar un diccionario en python que recoja los síntomas clínicos mencionados.
+# Generar un diccionario en python que recoja los síntomas clínicos mencionados.
 
-FORMATO RESPUESTA:
+# FORMATO RESPUESTA:
 
-python dictionary -> {'symptoms':[]}
+# python dictionary -> {'symptoms':[]}
 
-Esta es la descripción clínica proporcionada por el usuario: '
-An 8 yr old boy was referred to Pediatrics Neurologic Clinic Mashhad, Iran; due to developmental delay and seizure attacks from 6 yr ago. He was the second child of non relative healthy parents; there was no evidence of seizure or mental retardation in his family. He was born at term by a vaginal delivery with normal APGAR score and birth weight. He had a history of neonatal icterus and phototherapy.
+# Esta es la descripción clínica proporcionada por el usuario: '
+# An 8 yr old boy was referred to Pediatrics Neurologic Clinic Mashhad, Iran; due to developmental delay and seizure attacks from 6 yr ago. He was the second child of non relative healthy parents; there was no evidence of seizure or mental retardation in his family. He was born at term by a vaginal delivery with normal APGAR score and birth weight. He had a history of neonatal icterus and phototherapy.
 
-He had a happy face and the parents noticed developmental delay at 2 yr old. He was admitted in a hospital because of tonic-colonic seizures and valproate sodium was administered for him. He was able to walk independently at 4 yr old. At the age of 6 yr, he was referred to Children Neurology Department in Mashhad due to hyperactivity, where received risperidone.
+# He had a happy face and the parents noticed developmental delay at 2 yr old. He was admitted in a hospital because of tonic-colonic seizures and valproate sodium was administered for him. He was able to walk independently at 4 yr old. At the age of 6 yr, he was referred to Children Neurology Department in Mashhad due to hyperactivity, where received risperidone.
 
-On physical examination, he had mandibular prognathism, strabismus and unusual laughing facial expression (Figure1). His head circumference was 51 cm.
+# On physical examination, he had mandibular prognathism, strabismus and unusual laughing facial expression (Figure1). His head circumference was 51 cm.
 
-Written informed consent was obtained from his parents.
+# Written informed consent was obtained from his parents.
 
-His walking was unsteady, but muscles tone, force and deep tendon reflexes were normal. Joints range of motion was normal. Besides, he had speech disability and could walk independently, but could not run. He had restricted communicative abilities and suffered from severe mental retardation.
+# His walking was unsteady, but muscles tone, force and deep tendon reflexes were normal. Joints range of motion was normal. Besides, he had speech disability and could walk independently, but could not run. He had restricted communicative abilities and suffered from severe mental retardation.
 
-Laboratory findings were normal. Brain MRI and CBC test were normal. Thyroid function test showed hypothyroidism, controlled by levothyroxine since 2 yr old.
+# Laboratory findings were normal. Brain MRI and CBC test were normal. Thyroid function test showed hypothyroidism, controlled by levothyroxine since 2 yr old.
 
-In our patient, seizure attacks have been continued from the age of 2 yr, despite various pharmacologic treatments.
-'
+# In our patient, seizure attacks have been continued from the age of 2 yr, despite various pharmacologic treatments.
+# '
 
-Recuerda SOLO contestar con el diccionario, nada más
-"""
+# Recuerda SOLO contestar con el diccionario, nada más
+# """
 
-respuesta = st.session_state.chatbot.query(prompt_prueba)['text']
+# respuesta = st.session_state.chatbot.query(prompt_prueba)['text']
 
-st.write(respuesta)
+# st.write(respuesta)
