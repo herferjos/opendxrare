@@ -211,7 +211,7 @@ st.set_page_config(page_title="OpenDxRare", page_icon="🧬", layout="wide")
 
 st.title("Prueba")
 
-descripcion = st.text_input(label = "Descripcion")
+descripcion = st.text_area(label = "Descripcion")
 
 if st.button(label = "Enviar"):
     respuesta = orchest(descripcion)
