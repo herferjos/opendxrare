@@ -166,15 +166,15 @@ def get_ranked_list(hpo_ids):
     orpha_df = pd.DataFrame(orpha_data, columns=["ID", "MONDO ID", "Disease", "Score", "Description", "Shared Phenotypes", "Associated Genes", "Gene Reviews URL", "Inheritance"])
     
     df = pd.concat([omim_df, orpha_df], axis=0, ignore_index=True)
-    # df['Score'] = df['Score'].astype(float)
+    df['Score'] = df['Score'].astype(float)
 
     # Remove duplicates based on MONDO ID and keep the row with the highest score
     df = df.sort_values(by=["MONDO ID", "Score"], ascending=[True, False])
     df = df.drop_duplicates(subset=["MONDO ID"], keep="first")
     
     # Get the top 10 rows based on score
-    # df = df.nlargest(5, "Score")
-    # df = df.reset_index(drop=True)
+    df = df.nlargest(5, "Score")
+    df = df.reset_index(drop=True)
 
 
     lista_diseases_id = df.iloc[:, 1].tolist()
@@ -190,12 +190,12 @@ def orchest(description):
     lista_codigos = []
 
     for sintoma in lista_sintomas:
-        codigo_sintoma = selector(search_database(sintoma), sintoma)
+        codigo_sintoma = selector(search_database(sintoma), sintoma).strip()
         lista_codigos.append(codigo_sintoma)
-    return lista_codigos
-    # tabla, lista_ids = get_ranked_list(lista_codigos)
+        
+    tabla, lista_ids = get_ranked_list(lista_codigos)
 
-    # return tabla, lista_ids
+    return tabla, lista_ids
 
 
 
@@ -210,4 +210,4 @@ descripcion = st.text_input(label = "Descripcion")
 if st.button(label = "Enviar"):
     respuesta = orchest(descripcion)
     st.write(respuesta)
-    # st.markdown(respuesta[0].to_markdown(index=False), unsafe_allow_html=True)
+    st.markdown(respuesta[0].to_markdown(index=False), unsafe_allow_html=True)
