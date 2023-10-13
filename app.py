@@ -192,10 +192,10 @@ def orchest(description):
     for sintoma in lista_sintomas:
         codigo_sintoma = selector(search_database(sintoma), sintoma)
         lista_codigos.append(codigo_sintoma)
+    return lista_codigos
+    # tabla, lista_ids = get_ranked_list(lista_codigos)
 
-    tabla, lista_ids = get_ranked_list(lista_codigos)
-
-    return tabla, lista_ids
+    # return tabla, lista_ids
 
 
 
@@ -209,5 +209,5 @@ descripcion = st.text_input(label = "Descripcion")
 
 if st.button(label = "Enviar"):
     respuesta = orchest(descripcion)
-    st.write(respuesta[0])
-    st.markdown(respuesta[0].to_markdown(index=False), unsafe_allow_html=True)
+    st.write(respuesta)
+    # st.markdown(respuesta[0].to_markdown(index=False), unsafe_allow_html=True)
