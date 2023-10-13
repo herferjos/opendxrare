@@ -200,7 +200,7 @@ def orchest(description):
 
 st.title("Prueba")
 
-descripcion = st.text_input(label = "Descripcion")
+descripcion = st.text_input(label = "Descripcion"):
 
 if st.button(label = "Enviar")
     respuesta = orchest(descripcion)
