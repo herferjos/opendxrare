@@ -121,7 +121,7 @@ def get_ranked_list(hpo_ids):
                 ncbi_genes_omim_string = ", ".join([f"[NCBIGene:{ncbi_id.split(':')[1]}](https://www.ncbi.nlm.nih.gov/gene/{ncbi_id.split(':')[1]})" for ncbi_id in ncbi_genes_omim])
             else:
                 ncbi_genes_omim_string = ""
-            omim_gene_reviews_url = f"[Gene Review]({omim_item.get("gene_reviews_url")})"    
+            omim_gene_reviews_url = f"[Gene Review]({omim_item.get('gene_reviews_url')})"   
             omim_inheritance = omim_item.get("inheritance_en")
             if omim_inheritance:
                 omim_inheritance = ", ".join([v for k, v in omim_inheritance.items()])
@@ -143,7 +143,7 @@ def get_ranked_list(hpo_ids):
               ncbi_genes_orpha_string = ", ".join([f"[NCBIGene:{ncbi_id.split(':')[1]}](https://www.ncbi.nlm.nih.gov/gene/{ncbi_id.split(':')[1]})" for ncbi_id in ncbi_genes_orpha])
             else:
               ncbi_genes_orpha_string = ""
-            orpha_gene_reviews_url = f"[Gene Review]({orpha_item.get("gene_reviews_url")})"               
+            orpha_gene_reviews_url = f"[Gene Review]({orpha_item.get('gene_reviews_url')})"               
             orpha_inheritance = orpha_item.get("inheritance_en")
             if orpha_inheritance:
                 orpha_inheritance = ", ".join([v for k, v in orpha_inheritance.items()])
