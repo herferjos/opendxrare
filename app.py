@@ -11,6 +11,7 @@ import pandas as pd
 import json
 import os
 import glob
+import random
 
 # INICIAMOS TODAS LAS VARIABLES ESTÁTICAS NECESARIAS
 
@@ -60,6 +61,9 @@ def extractor(caso_clinico):
 
     Recuerda SOLO contestar con el diccionario, nada más - > {'symptoms':[]}
     """
+    id = random.uniform(1, 10000000) 
+    id = st.session_state.chatbot.new_conversation()
+    st.session_state.chatbot.change_conversation(id)
     respuesta = st.session_state.chatbot.query(prompt)['text']
     return respuesta
 
