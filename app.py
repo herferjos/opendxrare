@@ -9,6 +9,7 @@ import numpy as np
 import requests
 import pandas as pd
 import json
+import os
 
 # INICIAMOS TODAS LAS VARIABLES ESTÁTICAS NECESARIAS
 
