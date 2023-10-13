@@ -61,7 +61,6 @@ def extractor(caso_clinico):
     Recuerda SOLO contestar con el diccionario, nada más
     """
     respuesta = st.session_state.chatbot.query(prompt)['text']
-    print(respuesta)
     return respuesta
 
 
@@ -208,3 +207,21 @@ if st.button(label = "Enviar"):
     respuesta = orchest(descripcion)
     
     st.markdown(respuesta[0].to_markdown(index=False), unsafe_allow_html=True)
+
+prompt_prueba = """
+An 8 yr old boy was referred to Pediatrics Neurologic Clinic Mashhad, Iran; due to developmental delay and seizure attacks from 6 yr ago. He was the second child of non relative healthy parents; there was no evidence of seizure or mental retardation in his family. He was born at term by a vaginal delivery with normal APGAR score and birth weight. He had a history of neonatal icterus and phototherapy.
+
+He had a happy face and the parents noticed developmental delay at 2 yr old. He was admitted in a hospital because of tonic-colonic seizures and valproate sodium was administered for him. He was able to walk independently at 4 yr old. At the age of 6 yr, he was referred to Children Neurology Department in Mashhad due to hyperactivity, where received risperidone.
+
+On physical examination, he had mandibular prognathism, strabismus and unusual laughing facial expression (Figure1). His head circumference was 51 cm.
+
+Written informed consent was obtained from his parents.
+
+His walking was unsteady, but muscles tone, force and deep tendon reflexes were normal. Joints range of motion was normal. Besides, he had speech disability and could walk independently, but could not run. He had restricted communicative abilities and suffered from severe mental retardation.
+
+Laboratory findings were normal. Brain MRI and CBC test were normal. Thyroid function test showed hypothyroidism, controlled by levothyroxine since 2 yr old.
+"""
+
+respuesta = st.session_state.chatbot.query(prompt_prueba)['text']
+
+st.write(respuesta)
