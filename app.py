@@ -190,7 +190,8 @@ def orchest(description):
     lista_codigos = []
 
     for sintoma in lista_sintomas:
-        codigo_sintoma = selector(search_database(sintoma), sintoma).strip()
+        codigo_sintoma = selector(search_database(sintoma), sintoma)
+        codigo_sintoma = codigo_sintoma.strip()
         lista_codigos.append(codigo_sintoma)
         
     tabla, lista_ids = get_ranked_list(lista_codigos)
