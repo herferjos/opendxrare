@@ -235,4 +235,4 @@ Recuerda SOLO contestar con el diccionario, nada más
 
 respuesta = st.session_state.chatbot.query(prompt_prueba)['text']
 
-# st.write(respuesta)
+st.write(respuesta)
