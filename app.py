@@ -58,7 +58,7 @@ def extractor(caso_clinico):
 
     prompt = prompt + f"""Esta es la descripción clínica proporcionada por el usuario: '{caso_clinico}'
 
-    Recuerda SOLO contestar con el diccionario, nada más
+    Recuerda SOLO contestar con el diccionario, nada más - > {'symptoms':[]}
     """
     respuesta = st.session_state.chatbot.query(prompt)['text']
     return respuesta
