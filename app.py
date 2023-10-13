@@ -103,8 +103,8 @@ def selector(respuesta_database, sintoma):
     Esta son las posibilidades que he encontrado: {respuesta_database}
     ¡Recuerda SOLO contestar con el HPO_ID, nada más!
     """
-
-    return st.session_state.chatbot.query(prompt)['text']
+    respuesta = st.session_state.chatbot.query(prompt)['text']
+    return respuesta
 
 @st.cache_data(show_spinner=False, persist = True)
 def get_ranked_list(hpo_ids):
