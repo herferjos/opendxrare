@@ -218,7 +218,7 @@ st.markdown(
   """
   <div style='text-align: center;'>
       <h1>🧬 DxRare 🧬</h1>
-      <h4> Empoderando a los profesionales clínicos en el proceso diagnóstico</h4>
+      <h4>Empowering clinicians in the diagnostic process</h4>
   </div>
   """,
     unsafe_allow_html=True
@@ -227,11 +227,11 @@ st.write("---")
 
 descripcion = st.text_area(label = "Clinical Description")
 
-if st.button(label = "Extract symptoms"):
+if st.button(label = "Extract symptoms", type = "primary"):
     df_sintomas = orchest(descripcion)
     st.write(df_sintomas)
-    
-    if st.button(label = "Diagnose symptoms"):
+    st.write("---")
+    if st.button(label = "Diagnose symptoms", type = "primary"):
         lista_codigos = df_sintomas["ID"].to_list()
         tabla, lista_ids = get_ranked_list(lista_codigos)
         st.markdown(tabla.to_markdown(index=False), unsafe_allow_html=True)
