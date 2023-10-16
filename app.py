@@ -102,7 +102,11 @@ def selector(respuesta_database, sintoma):
             Voy a hacer una búsqueda rápida de los síntomas posibles asociados a la descripción. Responde únicamente con el ID que mejor se ajuste al síntoma descrito
             """
             prompt = prompt + f"""Esta es la descripción del síntoma proporcionada: '{sintoma}'
-            Esta son las posibilidades que he encontrado: {respuesta_database}"""
+            Esta son las posibilidades que he encontrado: {respuesta_database}
+            """
+            prompt = prompt + '''
+            FORMATO RESPUESTA:
+            {"ID": <HPO_ID>, "Name": <HPO_NAME>"}'''
 
             id = st.session_state.chatbot.new_conversation()
             st.session_state.chatbot.change_conversation(id)
