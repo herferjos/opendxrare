@@ -100,14 +100,14 @@ def selector(respuesta_database, sintoma):
 
     FORMATO RESPUESTA:
 
-    SOLO EL HPO_ID CORRECTO, NADA MÁS
+    {"ID": <HPO_ID>, "Name": <HPO_NAME>"}
 
     """
 
     prompt = prompt + f"""Esta es la descripción del síntoma proporcionada: '{sintoma}'
 
     Esta son las posibilidades que he encontrado: {respuesta_database}
-    ¡Recuerda SOLO contestar con el HPO_ID, nada más!
+    ¡Recuerda SOLO contestar con el FORMATO RESPUESTA DADO, nada más!
     """
     id = st.session_state.chatbot.new_conversation()
     st.session_state.chatbot.change_conversation(id)
@@ -194,16 +194,19 @@ def orchest(description):
     diccionario = json.loads(respuesta)
     lista_sintomas = diccionario['symptoms']
 
-    lista_codigos = []
+    lista_codigo_sintomas = []
+    lista_nombre_sintomas = []
 
     for sintoma in lista_sintomas:
-        codigo_sintoma = selector(search_database(sintoma), sintoma)
-        codigo_sintoma = codigo_sintoma.strip()
-        lista_codigos.append(codigo_sintoma)
-        
-    tabla, lista_ids = get_ranked_list(lista_codigos)
+        diccionario_sintoma = selector(search_database(sintoma), sintoma)
+        codigo_sintoma = diccionario_sintoma["ID"]
+        nombre_sintoma = diccionario_sintoma["Name"]
+        lista_codigo_sintomas.append(codigo_sintoma)
+        lista_nombre_sintomas.append(nombre_sintoma)
 
-    return tabla, lista_ids
+    df = pd.DataFrame({"Original Symptom": lista_sintomas, "ID": lista_codigo_sintomas, "Name HPO ID": lista_nombre_sintomas})
+
+    return df
 
 
 
@@ -215,6 +218,11 @@ st.title("Prueba")
 
 descripcion = st.text_area(label = "Descripcion")
 
-if st.button(label = "Enviar"):
-    respuesta = orchest(descripcion)
-    st.markdown(respuesta[0].to_markdown(index=False), unsafe_allow_html=True)
+if st.button(label = "Extract symptoms"):
+    df_sintomas = orchest(descripcion)
+    st.write(df_sintomas)
+    
+if st.button(label = "Diagnose symptoms"):
+    lista_codigos = df_sintomas["ID"].to_list()
+    tabla, lista_ids = get_ranked_list(lista_codigos)
+    st.markdown(tabla.to_markdown(index=False), unsafe_allow_html=True)
