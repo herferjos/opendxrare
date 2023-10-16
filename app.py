@@ -240,7 +240,7 @@ def orchest(description):
         lista_nombre_sintomas.append(nombre_sintoma)
 
     df = pd.DataFrame({"Original Symptom": lista_sintomas, "ID": lista_codigo_sintomas, "Name HPO ID": lista_nombre_sintomas})
-
+    df['Original Symptom'] = df['Original Symptom'].str.capitalize()
     return df
 
 
@@ -263,10 +263,16 @@ st.write("---")
 descripcion = st.text_area(label = "Clinical Description")
 
 if st.button(label = "Extract symptoms", type = "primary"):
-    df_sintomas = orchest(descripcion)
-    st.write(df_sintomas)
-    st.write("---")
+    st.session_state['df_sintomas'] = orchest(descripcion)
+
+if 'df_sintomas' in st.session_state:
+    st.data_editor(df_sintomas, use_container_width=True, num_rows="dynamic", disabled=False)
+    
     if st.button(label = "Diagnose symptoms", type = "primary"):
         lista_codigos = df_sintomas["ID"].to_list()
         tabla, lista_ids = get_ranked_list(lista_codigos)
-        st.markdown(tabla.to_markdown(index=False), unsafe_allow_html=True)
+        st.session_state['tabla'] = tabla
+
+if 'tabla' in st.session_state:
+    st.write("---")
+    st.markdown(tabla.to_markdown(index=False), unsafe_allow_html=True)
