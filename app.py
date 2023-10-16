@@ -100,19 +100,21 @@ def selector(respuesta_database, sintoma):
             Sea preciso y no alucine con la información.
             MISIÓN
             Voy a hacer una búsqueda rápida de los síntomas posibles asociados a la descripción. Responde únicamente con el ID que mejor se ajuste al síntoma descrito
-            FORMATO RESPUESTA:
-            {"ID": <HPO_ID>, "Name": <HPO_NAME>"}
             """
-            
             prompt = prompt + f"""Esta es la descripción del síntoma proporcionada: '{sintoma}'
             Esta son las posibilidades que he encontrado: {respuesta_database}"""
-            prompt= prompt + """
-            ¡Recuerda SOLO elegir el síntoma adecuado y contestar con el FORMATO RESPUESTA DADO: {"ID": <HPO_ID>, "Name": <HPO_NAME>"} para que pueda ser cargado como json en python!
-            """
+
             id = st.session_state.chatbot.new_conversation()
             st.session_state.chatbot.change_conversation(id)
             respuesta = st.session_state.chatbot.query(prompt)['text']
-            return respuesta
+            prompt2= """
+            Contestame con el siguiente formato a la pregunta que te hice:
+            FORMATO RESPUESTA:
+            {"ID": <HPO_ID>, "Name": <HPO_NAME>"}
+            ¡Recuerda SOLO elegir el síntoma más adecuado y contestar con el FORMATO RESPUESTA DADO para que pueda ser cargado como json en python!
+            """
+            respuesta2 = st.session_state.chatbot.query(prompt2)['text']
+            return respuesta2
         except StopIteration:
             # Manejo del error StopIteration
             intentos += 1
