@@ -188,28 +188,30 @@ def get_ranked_list(hpo_ids):
 
     return df, lista_diseases_id
 
+def jsoner(respuesta):
+    while True:
+        try:
+            diccionario = json.loads(respuesta)
+            return diccionario
+        except json.JSONDecodeError:
+            prompt = """Formatea la respuesta correctamente a un diccionario en python:
+            """
+            prompt = prompt + f"Respuesta mal formateada: {respuesta}"
+            respuesta = st.session_state.chatbot.query(prompt)['text']
+
+
 @st.cache_data(show_spinner=False, persist = True)
 def orchest(description):
     respuesta = extractor(description)
-    try:
-        diccionario = json.loads(respuesta)
-        lista_sintomas = diccionario['symptoms']
-    except:
-        prompt = """Formatea la respuesta correctamente a un diccionario en python: {"symptoms": [<symptom_1>, <symptom_2>...]}
-        """
-        prompt = prompt + f"Respuesta mal formateada: {respuesta}"
-        
-        respuesta2 = st.session_state.chatbot.query(prompt)['text']
-        
-        diccionario = json.loads(respuesta2)
-        lista_sintomas = diccionario['symptoms']
+    diccionario jsoner(respuesta)
+    lista_sintomas = diccionario['symptoms']
 
     lista_codigo_sintomas = []
     lista_nombre_sintomas = []
 
     for sintoma in lista_sintomas:
         respuesta2 = selector(search_database(sintoma), sintoma)
-        diccionario_sintoma = json.loads(respuesta2)
+        diccionario_sintoma = jsoner(respuesta2)
         codigo_sintoma = diccionario_sintoma["ID"]
         nombre_sintoma = diccionario_sintoma["Name"]
         lista_codigo_sintomas.append(codigo_sintoma)
