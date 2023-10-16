@@ -12,6 +12,7 @@ import json
 import os
 import glob
 import tabulate
+import time
 
 # INICIAMOS TODAS LAS VARIABLES ESTÁTICAS NECESARIAS
 
@@ -39,7 +40,27 @@ if 'chatbot' not in st.session_state:
 
 
 # DEFINIMOS TODAS LAS FUNCIONES NECESARIAS
+@st.cache_data(show_spinner=False, persist = True)
+def chatbot(prompt):
+    max_intentos = 3
+    intentos = 0
+    while intentos < max_intentos:
+        try:
+            id = st.session_state.chatbot.new_conversation()
+            st.session_state.chatbot.change_conversation(id)
+            respuesta = st.session_state.chatbot.query(prompt)['text']
+            return respuesta
+        except StopIteration:
+            # Manejo del error StopIteration
+            intentos += 1
+            if intentos < max_intentos:
+                # Espera unos segundos antes de intentar de nuevo
+                time.sleep(2)
+            else:
+                st.error("Se alcanzó el máximo número de intentos. No se pudo obtener una respuesta válida.")
+                return None
 
+@st.cache_data(show_spinner=False, persist = True)
 def extractor(caso_clinico):
 
     prompt = f"""Esta es la descripción clínica proporcionada por el usuario: '{caso_clinico}'
@@ -61,13 +82,8 @@ def extractor(caso_clinico):
 
     ¡Recuerda extraer los síntomas médicos de la descripcion clínica proporcionada anteriormente y SOLO contestar con el diccionario en python para lo síntomas, nada más!
     '''
-
     
-    id = st.session_state.chatbot.new_conversation()
-    st.session_state.chatbot.change_conversation(id)
-    
-    respuesta = st.session_state.chatbot.query(prompt)['text']
-    return respuesta
+    return chatbot(prompt)
 
 @st.cache_data(show_spinner=False, persist = True)
 def search_database(query):
@@ -100,20 +116,38 @@ def selector(respuesta_database, sintoma):
 
     FORMATO RESPUESTA:
 
-    SOLO EL HPO_ID CORRECTO, NADA MÁS
+    {"ID": ..., "Name": ...}
 
     """
 
     prompt = prompt + f"""Esta es la descripción del síntoma proporcionada: '{sintoma}'
 
     Esta son las posibilidades que he encontrado: {respuesta_database}
-    ¡Recuerda SOLO contestar con el HPO_ID, nada más!
+    ¡Recuerda SOLO contestar con el FORMATO de JSON en python, nada más!
     """
-    id = st.session_state.chatbot.new_conversation()
-    st.session_state.chatbot.change_conversation(id)
+    return chatbot(prompt)
     
-    respuesta = st.session_state.chatbot.query(prompt)['text']
-    return respuesta
+@st.cache_data(show_spinner=False, persist = True)
+def jsoner(respuesta, instrucciones):
+    max_intentos=3
+    intentos = 0
+    while intentos < max_intentos:
+        try:
+            diccionario = json.loads(respuesta)
+            return diccionario
+        except json.JSONDecodeError:
+            if intentos < max_intentos - 1:
+                prompt = """Responde únicamente con un diccionario json de python con la siguiente estructura:
+                """
+                prompt = prompt + f"""
+                Instrucciones del JSON:
+                {instrucciones}
+                Respuesta mal formateada: {respuesta}"""
+                respuesta = st.session_state.chatbot.query(prompt)['text']
+            else:
+                print("Se alcanzó el máximo número de intentos. La respuesta no se pudo convertir a JSON.")
+                return None
+        intentos += 1
 
 @st.cache_data(show_spinner=False, persist = True)
 def get_ranked_list(hpo_ids):
@@ -191,19 +225,23 @@ def get_ranked_list(hpo_ids):
 @st.cache_data(show_spinner=False, persist = True)
 def orchest(description):
     respuesta = extractor(description)
-    diccionario = json.loads(respuesta)
+    diccionario = jsoner(respuesta,'{"symptoms":[]}')
     lista_sintomas = diccionario['symptoms']
 
-    lista_codigos = []
+    lista_codigo_sintomas = []
+    lista_nombre_sintomas = []
 
     for sintoma in lista_sintomas:
-        codigo_sintoma = selector(search_database(sintoma), sintoma)
-        codigo_sintoma = codigo_sintoma.strip()
-        lista_codigos.append(codigo_sintoma)
-        
-    tabla, lista_ids = get_ranked_list(lista_codigos)
+        respuesta2 = selector(search_database(sintoma), sintoma)
+        diccionario_sintoma = jsoner(respuesta2, '{"ID": ..., "Name": ...}')
+        codigo_sintoma = diccionario_sintoma["ID"]
+        nombre_sintoma = diccionario_sintoma["Name"]
+        lista_codigo_sintomas.append(codigo_sintoma)
+        lista_nombre_sintomas.append(nombre_sintoma)
 
-    return tabla, lista_ids
+    df = pd.DataFrame({"Original Symptom": lista_sintomas, "ID": lista_codigo_sintomas, "Name HPO ID": lista_nombre_sintomas})
+
+    return df
 
 
 
@@ -211,10 +249,24 @@ def orchest(description):
 
 st.set_page_config(page_title="OpenDxRare", page_icon="🧬", layout="wide")
 
-st.title("Prueba")
+st.markdown(
+  """
+  <div style='text-align: center;'>
+      <h1>🧬 DxRare 🧬</h1>
+      <h4>Empowering clinicians in the diagnostic process</h4>
+  </div>
+  """,
+    unsafe_allow_html=True
+)
+st.write("---")
 
-descripcion = st.text_area(label = "Descripcion")
+descripcion = st.text_area(label = "Clinical Description")
 
-if st.button(label = "Enviar"):
-    respuesta = orchest(descripcion)
-    st.markdown(respuesta[0].to_markdown(index=False), unsafe_allow_html=True)
+if st.button(label = "Extract symptoms", type = "primary"):
+    df_sintomas = orchest(descripcion)
+    st.write(df_sintomas)
+    st.write("---")
+    if st.button(label = "Diagnose symptoms", type = "primary"):
+        lista_codigos = df_sintomas["ID"].to_list()
+        tabla, lista_ids = get_ranked_list(lista_codigos)
+        st.markdown(tabla.to_markdown(index=False), unsafe_allow_html=True)
