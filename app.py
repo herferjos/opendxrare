@@ -169,7 +169,6 @@ def get_ranked_list(hpo_ids):
             omim_mondo_id = ", ".join(omim_item.get("mondo_id", []))
             omim_mondo_id_string = f"[{omim_mondo_id}](https://monarchinitiative.org/disease/{omim_mondo_id})"
             omim_score = omim_item.get("score")
-            omim_description = omim_item.get("description")
             omim_matched_hpo_id = omim_item.get("matched_hpo_id")
             omim_matched_hpo_id_string = ", ".join([f"[{codigo}](https://monarchinitiative.org/phenotype/{codigo})" for codigo in omim_matched_hpo_id.split(',')])
             ncbi_genes_omim = omim_item.get("ncbi_gene_id")
@@ -180,7 +179,7 @@ def get_ranked_list(hpo_ids):
             omim_inheritance = omim_item.get("inheritance_en")
             if omim_inheritance:
                 omim_inheritance = ", ".join([v for k, v in omim_inheritance.items()])
-            omim_data.append([omim_id_string, omim_mondo_id_string, omim_name, omim_score, omim_description, omim_matched_hpo_id_string, ncbi_genes_omim_string, omim_inheritance])
+            omim_data.append([omim_id_string, omim_mondo_id_string, omim_name, omim_score, omim_matched_hpo_id_string, ncbi_genes_omim_string, omim_inheritance])
         
         if i < len(orpha_response):
             orpha_item = orpha_response[i]
@@ -190,7 +189,6 @@ def get_ranked_list(hpo_ids):
             orpha_mondo_id = ", ".join(orpha_item.get("mondo_id", []))
             orpha_mondo_id_string = f"[{orpha_mondo_id}](https://monarchinitiative.org/disease/{orpha_mondo_id})"
             orpha_score = orpha_item.get("score")
-            orpha_description = orpha_item.get("description")
             orpha_matched_hpo_id = orpha_item.get("matched_hpo_id")
             orpha_matched_hpo_id_string = ", ".join([f"[{codigo}](https://monarchinitiative.org/phenotype/{codigo})" for codigo in orpha_matched_hpo_id.split(',')])
             ncbi_genes_orpha = orpha_item.get("ncbi_gene_id")
@@ -201,10 +199,10 @@ def get_ranked_list(hpo_ids):
             orpha_inheritance = orpha_item.get("inheritance_en")
             if orpha_inheritance:
                 orpha_inheritance = ", ".join([v for k, v in orpha_inheritance.items()])
-            orpha_data.append([orpha_id_string, orpha_mondo_id_string, orpha_name, orpha_score, orpha_description, orpha_matched_hpo_id_string, ncbi_genes_orpha_string, orpha_inheritance])
+            orpha_data.append([orpha_id_string, orpha_mondo_id_string, orpha_name, orpha_score, orpha_matched_hpo_id_string, ncbi_genes_orpha_string, orpha_inheritance])
     
-    omim_df = pd.DataFrame(omim_data, columns=["ID", "MONDO ID", "Disease", "Score", "Description", "Shared Phenotypes", "Associated Genes", "Inheritance"])
-    orpha_df = pd.DataFrame(orpha_data, columns=["ID", "MONDO ID", "Disease", "Score", "Description", "Shared Phenotypes", "Associated Genes", "Inheritance"])
+    omim_df = pd.DataFrame(omim_data, columns=["ID", "MONDO ID", "Disease", "Score", "Shared Phenotypes", "Associated Genes", "Inheritance"])
+    orpha_df = pd.DataFrame(orpha_data, columns=["ID", "MONDO ID", "Disease", "Score", "Shared Phenotypes", "Associated Genes", "Inheritance"])
     
     df = pd.concat([omim_df, orpha_df], axis=0, ignore_index=True)
     df['Score'] = df['Score'].astype(float)
