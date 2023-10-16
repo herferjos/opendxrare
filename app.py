@@ -195,17 +195,24 @@ def get_ranked_list(hpo_ids):
 
     return df, lista_diseases_id
 
-def jsoner(respuesta):
-    while True:
+
+@st.cache_data(show_spinner=False, persist = True)
+def jsoner(respuesta, max_intentos=3):
+    intentos = 0
+    while intentos < max_intentos:
         try:
             diccionario = json.loads(respuesta)
             return diccionario
         except json.JSONDecodeError:
-            prompt = """Formatea la respuesta correctamente a un diccionario en python:
-            """
-            prompt = prompt + f"Respuesta mal formateada: {respuesta}"
-            respuesta = st.session_state.chatbot.query(prompt)['text']
-
+            if intentos < max_intentos - 1:
+                prompt = """Formatea la respuesta correctamente a un diccionario en python:
+                """
+                prompt = prompt + f"Respuesta mal formateada: {respuesta}"
+                respuesta = st.session_state.chatbot.query(prompt)['text']
+            else:
+                print("Se alcanzó el máximo número de intentos. La respuesta no se pudo convertir a JSON.")
+                return None
+        intentos += 1
 
 @st.cache_data(show_spinner=False, persist = True)
 def orchest(description):
