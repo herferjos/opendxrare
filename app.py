@@ -203,7 +203,7 @@ def jsoner(respuesta):
 @st.cache_data(show_spinner=False, persist = True)
 def orchest(description):
     respuesta = extractor(description)
-    diccionario jsoner(respuesta)
+    diccionario = jsoner(respuesta)
     lista_sintomas = diccionario['symptoms']
 
     lista_codigo_sintomas = []
