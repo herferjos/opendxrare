@@ -106,7 +106,8 @@ def selector(respuesta_database, sintoma):
             """
             prompt = prompt + '''
             FORMATO RESPUESTA:
-            {"ID": <HPO_ID>, "Name": <HPO_NAME>"}'''
+            {"ID": <HPO_ID>, "Name": <HPO_NAME>"}
+            Elige solo un ID-Name'''
 
             id = st.session_state.chatbot.new_conversation()
             st.session_state.chatbot.change_conversation(id)
