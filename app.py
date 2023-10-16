@@ -266,13 +266,13 @@ if st.button(label = "Extract symptoms", type = "primary"):
     st.session_state['df_sintomas'] = orchest(descripcion)
 
 if 'df_sintomas' in st.session_state:
-    st.data_editor(df_sintomas, use_container_width=True, num_rows="dynamic", disabled=False)
+    st.data_editor(st.session_state.df_sintomas, use_container_width=True, num_rows="dynamic", disabled=False)
     
     if st.button(label = "Diagnose symptoms", type = "primary"):
-        lista_codigos = df_sintomas["ID"].to_list()
+        lista_codigos = st.session_state.df_sintomas["ID"].to_list()
         tabla, lista_ids = get_ranked_list(lista_codigos)
         st.session_state['tabla'] = tabla
 
 if 'tabla' in st.session_state:
     st.write("---")
-    st.markdown(tabla.to_markdown(index=False), unsafe_allow_html=True)
+    st.markdown(st.session_state.tabla.to_markdown(index=False), unsafe_allow_html=True)
