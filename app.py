@@ -12,6 +12,7 @@ import json
 import os
 import glob
 import tabulate
+import time
 
 # INICIAMOS TODAS LAS VARIABLES ESTÁTICAS NECESARIAS
 
@@ -39,35 +40,37 @@ if 'chatbot' not in st.session_state:
 
 
 # DEFINIMOS TODAS LAS FUNCIONES NECESARIAS
-
+@st.cache_data(show_spinner=False, persist = True)
 def extractor(caso_clinico):
-
-    prompt = f"""Esta es la descripción clínica proporcionada por el usuario: '{caso_clinico}'
-    """
-
-    prompt = prompt + '''
-    CONDICIONES
-
-    Usted es un asistente médico para ayudar a extraer síntomas y fenotipos de un caso clínico.
-    Sea preciso y no alucine con la información.
-
-    MISIÓN
-
-    Generar un diccionario en python que recoja los síntomas clínicos mencionados.
-
-    FORMATO RESPUESTA:
-
-    python dictionary -> {"symptoms":[]}
-
-    ¡Recuerda extraer los síntomas médicos de la descripcion clínica proporcionada anteriormente y SOLO contestar con el diccionario en python para lo síntomas, nada más!
-    '''
-
-    
-    id = st.session_state.chatbot.new_conversation()
-    st.session_state.chatbot.change_conversation(id)
-    
-    respuesta = st.session_state.chatbot.query(prompt)['text']
-    return respuesta
+    max_intentos = 3
+    intentos = 0
+    while intentos < max_intentos:
+        try:
+            prompt = f"""Esta es la descripción clínica proporcionada por el usuario: '{caso_clinico}'
+            """
+            prompt = prompt + '''
+            CONDICIONES
+            Usted es un asistente médico para ayudar a extraer síntomas y fenotipos de un caso clínico.
+            Sea preciso y no alucine con la información.
+            MISIÓN
+            Generar un diccionario en python que recoja los síntomas clínicos mencionados.
+            FORMATO RESPUESTA:
+            python dictionary -> {"symptoms":[]}
+            ¡Recuerda extraer los síntomas médicos de la descripcion clínica proporcionada anteriormente y SOLO contestar con el diccionario en python para los síntomas, nada más!
+            '''
+            id = st.session_state.chatbot.new_conversation()
+            st.session_state.chatbot.change_conversation(id)
+            respuesta = st.session_state.chatbot.query(prompt)['text']
+            return respuesta
+        except StopIteration:
+            # Manejo del error StopIteration
+            intentos += 1
+            if intentos < max_intentos:
+                # Espera unos segundos antes de intentar de nuevo
+                time.sleep(2)
+            else:
+                st.error("Se alcanzó el máximo número de intentos. No se pudo obtener una respuesta válida.")
+                return None
 
 @st.cache_data(show_spinner=False, persist = True)
 def search_database(query):
@@ -87,33 +90,37 @@ def search_database(query):
     
 @st.cache_data(show_spinner=False, persist = True)
 def selector(respuesta_database, sintoma):
-
-    prompt = """
-    CONDICIONES
-
-    Usted es un asistente médico para ayudar a elegir el síntoma correcto para cada caso.
-    Sea preciso y no alucine con la información.
-
-    MISIÓN
-
-    Voy a hacer una búsqueda rápida de los síntomas posibles asociados a la descripción. Responde únicamente con el ID que mejor se ajuste al síntoma descrito
-
-    FORMATO RESPUESTA:
-
-    {"ID": [<HPO_ID_1>, <HPO_ID_2>,...], "Name": [<HPO_NAME_1>, <HPO_NAME_2>,...]"}
-
-    """
-
-    prompt = prompt + f"""Esta es la descripción del síntoma proporcionada: '{sintoma}'
-
-    Esta son las posibilidades que he encontrado: {respuesta_database}
-    ¡Recuerda SOLO contestar con el FORMATO RESPUESTA DADO, nada más!
-    """
-    id = st.session_state.chatbot.new_conversation()
-    st.session_state.chatbot.change_conversation(id)
-    
-    respuesta = st.session_state.chatbot.query(prompt)['text']
-    return respuesta
+    max_intentos = 3
+    intentos = 0
+    while intentos < max_intentos:
+        try:
+            prompt = """
+            CONDICIONES
+            Usted es un asistente médico para ayudar a elegir el síntoma correcto para cada caso.
+            Sea preciso y no alucine con la información.
+            MISIÓN
+            Voy a hacer una búsqueda rápida de los síntomas posibles asociados a la descripción. Responde únicamente con el ID que mejor se ajuste al síntoma descrito
+            FORMATO RESPUESTA:
+            {"ID": <HPO_ID>, "Name": <HPO_NAME>"}
+            """
+            
+            prompt = prompt + f"""Esta es la descripción del síntoma proporcionada: '{sintoma}'
+            Esta son las posibilidades que he encontrado: {respuesta_database}
+            ¡Recuerda SOLO elegir el síntoma adecuado y contestar con el FORMATO RESPUESTA DADO, nada más!
+            """
+            id = st.session_state.chatbot.new_conversation()
+            st.session_state.chatbot.change_conversation(id)
+            respuesta = st.session_state.chatbot.query(prompt)['text']
+            return respuesta
+        except StopIteration:
+            # Manejo del error StopIteration
+            intentos += 1
+            if intentos < max_intentos:
+                # Espera unos segundos antes de intentar de nuevo
+                time.sleep(2)
+            else:
+                st.error("Se alcanzó el máximo número de intentos. No se pudo obtener una respuesta válida.")
+                return None
 
 @st.cache_data(show_spinner=False, persist = True)
 def get_ranked_list(hpo_ids):
