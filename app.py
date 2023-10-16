@@ -108,10 +108,10 @@ def selector(respuesta_database, sintoma):
             st.session_state.chatbot.change_conversation(id)
             respuesta = st.session_state.chatbot.query(prompt)['text']
             prompt2= """
-            Contestame con el siguiente formato a la pregunta que te hice:
+            Contestame con un string que contenga el siguiente diccionario de JSON:
             FORMATO RESPUESTA:
             {"ID": <HPO_ID>, "Name": <HPO_NAME>"}
-            ¡Recuerda SOLO elegir el síntoma más adecuado y contestar con el FORMATO RESPUESTA DADO para que pueda ser cargado como json en python!
+            ¡Recuerda SOLO elegir el síntoma más adecuado y contestar con el FORMATO RESPUESTA DADO para que pueda ser cargado como json en python directamente tu respuesta!
             """
             respuesta2 = st.session_state.chatbot.query(prompt2)['text']
             return respuesta2
