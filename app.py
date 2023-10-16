@@ -105,8 +105,9 @@ def selector(respuesta_database, sintoma):
             """
             
             prompt = prompt + f"""Esta es la descripción del síntoma proporcionada: '{sintoma}'
-            Esta son las posibilidades que he encontrado: {respuesta_database}
-            ¡Recuerda SOLO elegir el síntoma adecuado y contestar con el FORMATO RESPUESTA DADO, nada más!
+            Esta son las posibilidades que he encontrado: {respuesta_database}"""
+            prompt= prompt + """
+            ¡Recuerda SOLO elegir el síntoma adecuado y contestar con el FORMATO RESPUESTA DADO: {"ID": <HPO_ID>, "Name": <HPO_NAME>"} para que pueda ser cargado como json en python!
             """
             id = st.session_state.chatbot.new_conversation()
             st.session_state.chatbot.change_conversation(id)
