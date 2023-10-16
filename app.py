@@ -100,7 +100,7 @@ def selector(respuesta_database, sintoma):
 
     FORMATO RESPUESTA:
 
-    {"ID": <HPO_ID>, "Name": <HPO_NAME>"}
+    {"ID": [<HPO_ID_1>, <HPO_ID_2>,...], "Name": [<HPO_NAME_1>, <HPO_NAME_2>,...]"}
 
     """
 
