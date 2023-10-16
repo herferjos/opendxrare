@@ -191,8 +191,18 @@ def get_ranked_list(hpo_ids):
 @st.cache_data(show_spinner=False, persist = True)
 def orchest(description):
     respuesta = extractor(description)
-    diccionario = json.loads(respuesta)
-    lista_sintomas = diccionario['symptoms']
+    try:
+        diccionario = json.loads(respuesta)
+        lista_sintomas = diccionario['symptoms']
+    except:
+        prompt = """Formatea la respuesta correctamente a un diccionario en python: {"symptoms": [<symptom_1>, <symptom_2>...]}
+        """
+        prompt = prompt + f"Respuesta mal formateada: {respuesta}"
+        
+        respuesta2 = st.session_state.chatbot.query(prompt)['text']
+        
+        diccionario = json.loads(respuesta2)
+        lista_sintomas = diccionario['symptoms']
 
     lista_codigo_sintomas = []
     lista_nombre_sintomas = []
