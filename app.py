@@ -13,6 +13,7 @@ import os
 import glob
 import tabulate
 import time
+from st_paywall import add_auth
 
 # INICIAMOS TODAS LAS VARIABLES ESTÁTICAS NECESARIAS
 
@@ -257,6 +258,8 @@ st.markdown(
     unsafe_allow_html=True
 )
 st.write("---")
+
+add_auth(required=True)
 
 descripcion = st.text_area(label = "Clinical Description")
 
