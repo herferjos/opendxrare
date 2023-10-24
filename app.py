@@ -47,26 +47,20 @@ st.markdown(
 )
 st.write("---")
 
-if "email" not in st.session_state:
-    st.warning("Por favor, ingresa con tu cuenta de Google habitual para poder empezar a usar la plataforma")
-    st.warning("Luego, ayúdanos a mantener la plataforma con una pequeña aportación")
-
-
 st.markdown("<h4 style='text-align: center;'>¡Bienvenidos a la plataforma DxRare!</h4>", unsafe_allow_html=True)
 st.write("---")
-st.write("## ¿Cómo funciona la plataforma?")
-st.video("https://youtu.be/6owq8uIESqA")
+with st.expander("¿Cómo funciona la plataforma?"):
+    st.video("https://youtu.be/6owq8uIESqA")
         
-    
-descripcion = st.text_area(label = "Clinical Description")
+descripcion = st.text_area(label = "Descripción Clínica")
 
-if st.button(label = "Extract symptoms", type = "primary"):
+if st.button(label = "Extraer Síntomas", type = "primary"):
     st.session_state['df_sintomas'] = orchest(descripcion)
 
 if 'df_sintomas' in st.session_state:
     st.data_editor(st.session_state.df_sintomas, use_container_width=True, num_rows="dynamic", disabled=False)
     
-    if st.button(label = "Diagnose symptoms", type = "primary"):
+    if st.button(label = "Diagnosticar Síntomas", type = "primary"):
         lista_codigos = st.session_state.df_sintomas["ID"].to_list()
         tabla, lista_ids = get_ranked_list(lista_codigos)
         st.session_state['tabla'] = tabla
