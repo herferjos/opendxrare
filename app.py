@@ -115,7 +115,7 @@ else:
           if re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', email):
             st.session_state['consentimiento'] = True
             st.session_state['email'] = email
-            if email == "prueba@gmail.com"
+            if email == "prueba@gmail.com":
               pass
             else:
                 enviar_info_usuario(email)
