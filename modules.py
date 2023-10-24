@@ -199,18 +199,18 @@ def get_ranked_list(hpo_ids):
                 orpha_inheritance = ", ".join([v for k, v in orpha_inheritance.items()])
             orpha_data.append([orpha_id_string, orpha_mondo_id_string, orpha_name, orpha_score, orpha_matched_hpo_id_string, ncbi_genes_orpha_string, orpha_inheritance])
     
-    omim_df = pd.DataFrame(omim_data, columns=["ID", "MONDO ID", "Disease", "Score", "Shared Phenotypes", "Associated Genes", "Inheritance"])
-    orpha_df = pd.DataFrame(orpha_data, columns=["ID", "MONDO ID", "Disease", "Score", "Shared Phenotypes", "Associated Genes", "Inheritance"])
+    omim_df = pd.DataFrame(omim_data, columns=["ID", "MONDO ID", "Enfermedad", "Puntuación", "Síntomas en común", "Genes asociados", "Herencia"])
+    orpha_df = pd.DataFrame(orpha_data, columns=["ID", "MONDO ID", "Enfermedad", "Puntuación", "Síntomas en común", "Genes asociados", "Herencia"])
     
     df = pd.concat([omim_df, orpha_df], axis=0, ignore_index=True)
     df['Score'] = df['Score'].astype(float)
 
     # Remove duplicates based on MONDO ID and keep the row with the highest score
-    df = df.sort_values(by=["MONDO ID", "Score"], ascending=[True, False])
+    df = df.sort_values(by=["MONDO ID", "Puntuación"], ascending=[True, False])
     df = df.drop_duplicates(subset=["MONDO ID"], keep="first")
     
     # Get the top 10 rows based on score
-    df = df.nlargest(5, "Score")
+    df = df.nlargest(5, "Puntuación")
     df = df.reset_index(drop=True)
 
 
@@ -236,6 +236,6 @@ def orchest(description):
         lista_codigo_sintomas.append(codigo_sintoma)
         lista_nombre_sintomas.append(nombre_sintoma)
 
-    df = pd.DataFrame({"Original Symptom": lista_sintomas_original, "ID": lista_codigo_sintomas, "Name HPO ID": lista_nombre_sintomas})
+    df = pd.DataFrame({"Síntoma Original": lista_sintomas_original, "ID": lista_codigo_sintomas, "Nombre del ID": lista_nombre_sintomas})
     df['Original Symptom'] = df['Original Symptom'].str.capitalize()
     return df
