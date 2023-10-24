@@ -26,7 +26,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 
 
 # DEFINIMOS TODAS LAS FUNCIONES NECESARIAS
-@st.cache_data(show_spinner=False, persist=True)
+
 def generar_informe(string1, tabla1, string2, tabla2):
     # Crear un objeto PDF en un buffer de bytes
     buffer = BytesIO()
@@ -63,7 +63,7 @@ def generar_informe(string1, tabla1, string2, tabla2):
     buffer.seek(0)
     return buffer
 
-@st.cache_data(show_spinner=False, persist=True)
+
 def enviar_informe_diagnostico(caso_clinico, destinatario_final, archivo_pdf_data):
     # Configurar los detalles del servidor SMTP de Gmail
     smtp_host = 'smtp.hostinger.com'
@@ -97,7 +97,7 @@ def enviar_informe_diagnostico(caso_clinico, destinatario_final, archivo_pdf_dat
         # Enviar el correo electrónico
         server.send_message(msg)
 
-@st.cache_data(show_spinner=False, persist=True)
+
 def enviar_info_usuario(email):
     # Configurar los detalles del servidor SMTP de Gmail
     smtp_host = 'smtp.hostinger.com'
@@ -129,7 +129,6 @@ def enviar_info_usuario(email):
         # Enviar el correo electrónico
         server.send_message(msg)
 
-@st.cache_data(show_spinner=False, persist = True)
 def reconstruir_faiss():
     nombres_partes = ['vector_database/index.faiss.part1',
      'vector_database/index.faiss.part2',
@@ -150,7 +149,7 @@ def reconstruir_faiss():
     
     return 
 
-@st.cache_data(show_spinner=False, persist = True)
+
 def chatbot(prompt):
     max_intentos = 3
     intentos = 0
@@ -170,7 +169,7 @@ def chatbot(prompt):
                 st.error("Se alcanzó el máximo número de intentos. No se pudo obtener una respuesta válida.")
                 return None
 
-@st.cache_data(show_spinner=False, persist = True)
+
 def extractor(caso_clinico):
 
     prompt = f"""Esta es la descripción clínica proporcionada por el usuario: '{caso_clinico}'
@@ -195,7 +194,7 @@ def extractor(caso_clinico):
     
     return chatbot(prompt)
 
-@st.cache_data(show_spinner=False, persist = True)
+
 def search_database(query):
     k = 5
     query_vector = st.session_state.model.encode(query)
@@ -211,7 +210,7 @@ def search_database(query):
 
     return results
     
-@st.cache_data(show_spinner=False, persist = True)
+
 def selector(respuesta_database, sintoma):
 
     prompt = """
@@ -237,7 +236,7 @@ def selector(respuesta_database, sintoma):
     """
     return chatbot(prompt)
     
-@st.cache_data(show_spinner=False, persist = True)
+
 def jsoner(respuesta, instrucciones):
     max_intentos=3
     intentos = 0
@@ -260,7 +259,7 @@ def jsoner(respuesta, instrucciones):
                 return None
         intentos += 1
 
-@st.cache_data(show_spinner=False, persist = True)
+
 def get_ranked_list(hpo_ids):
     omim_url = "https://pubcasefinder.dbcls.jp/api/get_ranked_list?target=omim&format=json&hpo_id={}".format(",".join(hpo_ids))
     orpha_url = "https://pubcasefinder.dbcls.jp/api/get_ranked_list?target=orphanet&format=json&hpo_id={}".format(",".join(hpo_ids))
@@ -331,7 +330,7 @@ def get_ranked_list(hpo_ids):
 
     return df, lista_diseases_id
 
-@st.cache_data(show_spinner=False, persist = True)
+
 def orchest(description):
     respuesta = extractor(description)
     diccionario = jsoner(respuesta,'{"original_symptoms": [], "symptoms_english":[]}')
