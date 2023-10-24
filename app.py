@@ -58,11 +58,8 @@ if 'email' in st.session_state:
       if st.button(label = "Demo paciente 1", type = "primary"):
         with open('demo_1.txt', "r",encoding="utf-8") as archivo:
           content = archivo.read()
-        if 'rerun1' not in st.session_state:
-          exec(content)
-          st.session_state['rerun1'] = True
-          st.experimental_rerun()
-      if 'rerun1' in st.session_state:
+        exec(content)
+        st.experimental_rerun()
         st.success("Información clínica cargada correctamente")
 
     with columnas2:
@@ -71,11 +68,8 @@ if 'email' in st.session_state:
         st.session_state['uploaded_file'] = True
         with open('demo_2.txt', "r", encoding="utf-8") as archivo:
           content = archivo.read()
-        if 'rerun2' not in st.session_state:
-          exec(content)
-          st.session_state['rerun2'] = True
-          st.experimental_rerun()
-      if 'rerun2' in st.session_state:
+        exec(content)
+        st.experimental_rerun()
         st.success("Información clínica cargada correctamente")
 else:
     st.write("### Comienza a diagnosticar")
