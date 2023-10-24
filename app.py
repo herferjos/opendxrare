@@ -116,7 +116,7 @@ else:
             st.session_state['consentimiento'] = True
             st.session_state['email'] = email
             if email == "prueba@gmail.com":
-              pass
+                st.experimental_rerun()
             else:
                 enviar_info_usuario(email)
                 st.experimental_rerun()
