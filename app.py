@@ -20,6 +20,8 @@ from modules import chatbot, extractor, search_database, selector, jsoner, get_r
 if 'index_database' not in st.session_state:
     reconstruir_faiss()
     st.session_state['index_database'] = faiss.read_index("index.faiss")
+    if os.path.exists("index.faiss"):
+        os.remove("index.faiss")
 
 if 'texts_database' not in st.session_state:
     with open('vector_database/texts.pkl', 'rb') as f:
@@ -47,11 +49,16 @@ st.markdown(
 )
 st.write("---")
 
-st.markdown("<h4 style='text-align: center;'>¡Bienvenidos a la plataforma DxRare!</h4>", unsafe_allow_html=True)
-st.write("---")
+st.markdown("<h3 style='text-align: center;'>¡Bienvenidos a la plataforma DxRare!</h4>", unsafe_allow_html=True)
+st.markdown("""<h5 style='text-align: justify;'>
+      Esta iniciativa pretende <b>revolucionar la forma en que se diagnostican las enfermedades genéticas.</b> Sabemos lo difícil que es para los profesionales de la salud ofrecer un diagnóstico preciso y rápido a pacientes con patologías genéticas.
+  </h5>""", unsafe_allow_html=True)
+
 with st.expander("¿Cómo funciona la plataforma?"):
     st.video("https://youtu.be/6owq8uIESqA")
-        
+    
+st.write("---")
+
 descripcion = st.text_area(label = "Descripción Clínica")
 
 if st.button(label = "Extraer Síntomas", type = "primary"):
