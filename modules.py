@@ -77,14 +77,6 @@ def generar_informe(df_list, names, header, text1):
             elements.append(table)
             elements.append(Spacer(0.1 * inch, 0.4 * inch))
 
-    # Add text2 after tables
-    text2_style = getSampleStyleSheet()['Normal']
-    text2_style.fontSize = 12
-    text2_paragraphs = text2.split('\n')
-    for paragraph in text2_paragraphs:
-        elements.append(Paragraph(paragraph, text2_style))
-        elements.append(Spacer(0.1 * inch, 0.4 * inch))
-
     doc.build(elements)
 
     buffer.seek(0)
