@@ -58,6 +58,7 @@ st.write("---")
 
 if "email" not in st.session_state:
     st.warning("Por favor, ingresa con tu cuenta de Google habitual para poder empezar a usar la plataforma")
+    st.warning("Luego, ayúdanos a mantener la plataforma con una pequeña aportación")
 
 add_auth(required=True)
 
@@ -72,11 +73,6 @@ with st.sidebar:
 
 if select == "Inicio":
     st.markdown("<h4 style='text-align: center;'>¡Bienvenidos a la plataforma DxRare!</h4>", unsafe_allow_html=True)
-    st.write("---")
-    if st.session_state.user_subscribed == True:
-        pass
-    else:
-        st.warning("Por favor, suscríbete para poder empezar a usar la plataforma")
     st.write("---")
     st.write("## ¿Cómo funciona la plataforma?")
     st.video("https://youtu.be/6owq8uIESqA")
