@@ -14,7 +14,7 @@ import tabulate
 import time
 import re
 from streamlit_option_menu import option_menu
-from modules import chatbot, extractor, search_database, selector, jsoner, get_ranked_list, orchest, reconstruir_faiss
+from modules import chatbot, extractor, search_database, selector, jsoner, get_ranked_list, orchest, reconstruir_faiss, enviar_informe_diagnostico, enviar_info_usuario, generar_informe
 
 # INICIAMOS TODAS LAS VARIABLES ESTÁTICAS NECESARIAS
 
@@ -116,7 +116,7 @@ else:
           if re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', email):
             st.session_state['consentimiento'] = True
             st.session_state['email'] = email
-            # enviar_info_usuario(email)
+            enviar_info_usuario(email)
             st.experimental_rerun()
           else:
               st.warning("Por favor, introduce un email válido y acepta los términos y condiciones")
@@ -159,15 +159,22 @@ if 'email' in st.session_state:
         st.write("---")
         st.write("### 3) Proceso diagnóstico finalizado")
         st.markdown(st.session_state.tabla.to_markdown(index=False), unsafe_allow_html=True)
+
+        st.write("### 4) Descargar la información obtenida")
+        st.warning("Si deseas guardar el fenotipado realizado mediante inteligencia artificial del caso clínico descrito para posteriores ocasiones, introduce un identificador útil para ti")
         
-        if st.button(label = "Descargar informe", type = "primary"):
+        nombre_caso = st.text_input(label='Identificador del caso clínico',placeholder="Escribe un identificador para el caso...")
+        if nombre_caso:
             caso_clinico_txt = f"st.session_state['description'] = '''{st.session_state.description}'''\n" + f"st.session_state['df_sintomas'] = pd.DataFrame({st.session_state.df_sintomas.to_dict()})\n" + f"st.session_state['tabla'] = pd.DataFrame({st.session_state.tabla.to_dict()})\n"
+            informe_pdf = generar_informe(st.session_state.description,st.session_state.df_sintomas, st.session_state.tabla, caso_clinico_txt)
+            enviar_informe_diagnostico(nombre_caso, st.session_state.email, informe_pdf)
             st.download_button(
                         label="Descargar archivo TXT",
                         data=caso_clinico_txt,
-                        file_name="configuracion_caso_clinico_demo_1.txt",
+                        file_name=f"configuracion_caso_clinico_{nombre_caso}.txt",
                         mime="text/plain",
-            )
+            )            
+
 else:
     st.markdown("<h3 style='text-align: center;'>⛔Acceso Denegado⛔</h3>", unsafe_allow_html=True)
     st.error("Debes Iniciar Sesión en la primera página para poder continuar...")
