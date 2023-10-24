@@ -404,7 +404,7 @@ def get_ranked_list(hpo_ids):
     orpha_df = pd.DataFrame(orpha_data, columns=["ID", "MONDO ID", "Enfermedad", "Puntuación", "Síntomas en común", "Genes asociados", "Herencia"])
     
     df = pd.concat([omim_df, orpha_df], axis=0, ignore_index=True)
-    df['Score'] = df['Score'].astype(float)
+    df['Puntuación'] = df['Puntuación'].astype(float)
 
     # Remove duplicates based on MONDO ID and keep the row with the highest score
     df = df.sort_values(by=["MONDO ID", "Puntuación"], ascending=[True, False])
