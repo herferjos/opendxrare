@@ -78,7 +78,7 @@ if 'email' in st.session_state:
           st.experimental_rerun()
       if 'rerun2' in st.session_state:
         st.success("Información clínica cargada correctamente")
-  else:
+else:
     st.write("## Comienza a diagnosticar")   
     with st.form(key="formulario"):
         email = st.text_input(label='Email', placeholder="Escribe un email con el que poder contactar")
