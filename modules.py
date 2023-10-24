@@ -27,7 +27,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 
 # DEFINIMOS TODAS LAS FUNCIONES NECESARIAS
 
-def generar_informe(string1, tabla1, string2, tabla2):
+def generar_informe(string1, df1, string2, df2):
     # Convertir DataFrames a listas de listas para las tablas
     tabla1 = [list(df1.columns)] + df1.values.tolist()
     tabla2 = [list(df2.columns)] + df2.values.tolist()
