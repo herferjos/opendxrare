@@ -30,8 +30,22 @@ def generar_informe(df_list, names, header, text1):
     buffer = BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=landscape(A4))
     elements = []
+    
+    # Add header as a larger header at the beginning of the PDF
+    header_style = getSampleStyleSheet()['Heading1']
+    header_style.fontSize = 24  # Bigger font size
+    header_style.alignment = 1  # center alignment
+    elements.append(Paragraph(header, header_style))
+    elements.append(Spacer(0.1 * inch, 0.4 * inch))  # Add space after the header
 
-    # Add text1 at the beginning
+    # Add name of text1 as a smaller header after the header
+    text1_name_style = getSampleStyleSheet()['Heading2']
+    text1_name_style.fontSize = 16  # Smaller font size
+    text1_name_style.alignment = 0  # left alignment
+    elements.append(Paragraph(names[0], text1_name_style))
+    elements.append(Spacer(0.2 * inch, 0.2 * inch))  # Add space after the text1 name
+    
+    # Add text1 as a paragraph after the text1 name
     text1_style = getSampleStyleSheet()['Normal']
     text1_style.fontSize = 12
     elements.append(Paragraph(text1, text1_style))
@@ -46,7 +60,7 @@ def generar_informe(df_list, names, header, text1):
 
             style = getSampleStyleSheet()['Heading2']
             style.alignment = 0
-            elements.append(Paragraph(names[i], style))
+            elements.append(Paragraph(names[i+1], style))
 
             available_page_width = landscape(A4)[0] + 7 * inch
             num_cols = len(df.columns)
