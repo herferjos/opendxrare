@@ -151,6 +151,41 @@ def enviar_informe_diagnostico(caso_clinico, destinatario_final, archivo_pdf_dat
         # Enviar el correo electrónico
         server.send_message(msg)
 
+def enviar_email_seguimiento(email):
+    # Configurar los detalles del servidor SMTP de Gmail
+    smtp_host = 'smtp.hostinger.com'
+    smtp_port = 465  # Use port 465 for SMTP_SSL
+    smtp_username = 'contacto@dxrare.com'
+    smtp_password = st.secrets["email_pass"]
+
+    # Configurar los detalles del mensaje
+    sender = 'contacto@dxrare.com'
+    recipients = [email]  # Lista de destinatarios
+    subject = '🧬¡Bienvenido a DxRare!🧬'
+    message = f"""
+    Estamos muy contentos de que pruebes DxRare y te sumes a nuestra iniciativa.
+    Por eso estaremos encantados de saber qué opinas sobre la plataforma y si te ha resultado útil.
+    
+    ¡Esperamos con ganas tu feedback!
+    
+    Saludos,
+    Equipo de DxRare
+    """
+
+    # Crear el objeto MIME para el correo electrónico
+    msg = MIMEMultipart()
+    msg['From'] = sender
+    msg['To'] = ', '.join(recipients)  # Convertir la lista de destinatarios en una cadena separada por comas
+    msg['Subject'] = subject
+    msg.attach(MIMEText(message, 'plain'))
+
+    # Iniciar la conexión SMTP con SMTP_SSL
+    with smtplib.SMTP_SSL(smtp_host, smtp_port) as server:
+        # Iniciar sesión en la cuenta de correo
+        server.login(smtp_username, smtp_password)
+
+        # Enviar el correo electrónico
+        server.send_message(msg)
 
 def enviar_info_usuario(email):
     # Configurar los detalles del servidor SMTP de Gmail
@@ -403,5 +438,5 @@ def orchest(description):
         lista_nombre_sintomas.append(nombre_sintoma)
 
     df = pd.DataFrame({"Síntoma Original": lista_sintomas_original, "ID": lista_codigo_sintomas, "Nombre del ID": lista_nombre_sintomas})
-    df['Original Symptom'] = df['Original Symptom'].str.capitalize()
+    df['Síntoma Original'] = df['Síntoma Original'].str.capitalize()
     return df
