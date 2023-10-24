@@ -65,7 +65,7 @@ def generar_informe(df_list, names, header, text1):
             style.alignment = 0
             elements.append(Paragraph(names[i + 1], style))
 
-            available_page_width = landscape(A4)[0] - 0.5 * inch  # Reducir el ancho disponible por un pequeño margen
+            available_page_width = landscape(A4)[0] - 2 * inch  # Reducir el ancho disponible por un pequeño margen
             num_cols = len(df.columns)
             col_width = available_page_width / num_cols  # Ancho igual para todas las columnas
 
