@@ -115,7 +115,7 @@ def generar_informe(df_list, names, header, text1):
     buffer.seek(0)
     return buffer
 
-def enviar_informe_diagnostico(caso_clinico, destinatario_final, archivo_pdf_data):
+def enviar_informe_diagnostico(caso_clinico, destinatario_final, archivo_pdf_data, archivo_txt_data):
     # Configurar los detalles del servidor SMTP de Gmail
     smtp_host = 'smtp.hostinger.com'
     smtp_port = 465  # Use port 465 for SMTP_SSL
@@ -142,6 +142,11 @@ def enviar_informe_diagnostico(caso_clinico, destinatario_final, archivo_pdf_dat
     attachment_pdf = MIMEApplication(archivo_pdf_bytes, _subtype="pdf")
     attachment_pdf.add_header('Content-Disposition', 'attachment', filename=f'informe_{caso_clinico}.pdf')
     msg.attach(attachment_pdf)
+
+    # Adjuntar el archivo TXT
+    attachment_txt = MIMEApplication(archivo_txt_data, _subtype="txt")
+    attachment_txt.add_header('Content-Disposition', 'attachment', filename=f'configuracion_caso_clinico_{caso_clinico}.txt')
+    msg.attach(attachment_txt)
 
     # Iniciar la conexión SMTP con SMTP_SSL
     with smtplib.SMTP_SSL(smtp_host, smtp_port) as server:
