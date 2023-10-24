@@ -47,8 +47,6 @@ st.markdown(
 )
 st.write("---")
 
-st.markdown("<h3 style='text-align: center;'>¡Bienvenidos a la plataforma DxRare!</h3>", unsafe_allow_html=True)
-
 if 'email' in st.session_state:
     st.markdown("<h3 style='text-align: center;'>🎉¡Ya puedes empezar a navegar por la plataforma!🎉</h3>", unsafe_allow_html=True)
     st.markdown("<h3 style='text-align: center;'>¿Quieres probar con un caso clínico ficticio para empezar?</h3>", unsafe_allow_html=True)      
@@ -79,6 +77,7 @@ if 'email' in st.session_state:
       if 'rerun2' in st.session_state:
         st.success("Información clínica cargada correctamente")
 else:
+    st.markdown("<h3 style='text-align: center;'>¡Bienvenidos a la plataforma DxRare!</h3>", unsafe_allow_html=True)
     st.write("## Comienza a diagnosticar")   
     with st.form(key="formulario"):
         email = st.text_input(label='Email', placeholder="Escribe un email con el que poder contactar")
