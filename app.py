@@ -72,7 +72,7 @@ if 'email' in st.session_state:
         st.success("Información clínica cargada correctamente")
 else:
     st.write("### Comienza a diagnosticar")
-    st.warning("¡Gracias a ti podemos seguir avanzando, déjanos tu email antes de empezar a usar la plataforma para concerte y que nos aportes tu opinión al final de la sesión!")
+    st.info("¡Gracias a ti podemos seguir avanzando, déjanos tu email antes de empezar a usar la plataforma para concerte y que nos aportes tu opinión al final de la sesión!")
     with st.form(key="formulario"):
         email = st.text_input(label='Email', placeholder="Escribe un email con el que poder contactar")
         with st.expander("Términos y Condiciones"):
@@ -163,7 +163,7 @@ if 'email' in st.session_state:
         st.markdown(st.session_state.tabla.to_markdown(index=False), unsafe_allow_html=True)
 
         st.write("### 4) Descargar la información obtenida")
-        st.warning("Si deseas guardar el fenotipado realizado mediante inteligencia artificial del caso clínico descrito para posteriores ocasiones, introduce un identificador útil para ti")
+        st.info("Si deseas guardar el fenotipado realizado mediante inteligencia artificial del caso clínico descrito para posteriores ocasiones, introduce un identificador útil para ti")
         
         nombre_caso = st.text_input(label='Identificador del caso clínico',placeholder="Escribe un identificador para el caso...")
         if st.button(label = "Generar informe", type = "primary") and nombre_caso:
