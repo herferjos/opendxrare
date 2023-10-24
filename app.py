@@ -77,8 +77,7 @@ if 'email' in st.session_state:
       if 'rerun2' in st.session_state:
         st.success("Información clínica cargada correctamente")
 else:
-    st.markdown("<h3 style='text-align: center;'>¡Bienvenidos a la plataforma DxRare!</h3>", unsafe_allow_html=True)
-    st.write("## Comienza a diagnosticar")   
+    st.write("### Comienza a diagnosticar")   
     with st.form(key="formulario"):
         email = st.text_input(label='Email', placeholder="Escribe un email con el que poder contactar")
         with st.expander("Términos y Condiciones"):
@@ -127,14 +126,15 @@ else:
               st.warning("Por favor, introduce un email válido y acepta los términos y condiciones")
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------
-
-with st.expander("¿Cómo funciona la plataforma?"):
+st.write("### Demo de la plataforma")   
+with st.expander("⬇️ Vídeo ⬇️"):
     st.video("https://youtu.be/6owq8uIESqA")
     
 st.write("---")
 
 if 'email' in st.session_state:
-    st.write("## 1) Introduce la descripción clínica de tu paciente")
+    st.markdown("<h2 style='text-align: center;'>¡Bienvenido a la plataforma DxRare!</h2>", unsafe_allow_html=True)
+    st.write("### 1) Introduce la descripción clínica de tu paciente")
     st.info("Copia y pega en la cajita la situación de tu paciente o bien copia y pega el texto de la historia clínica, como prefieras")
     descripcion = st.text_area(label=":blue[Descripción clínica]", placeholder="Escribe aquí...")
     
@@ -149,7 +149,7 @@ if 'email' in st.session_state:
         st.write(st.session_state.description)
         
     if 'df_sintomas' in st.session_state:
-        st.write('## 2) Fenotipos encontrados')
+        st.write('### 2) Fenotipos encontrados')
         st.info("Selecciona de la lista proporcionada los fenotipos que deseas añadir al proceso de diagnóstico")
         st.data_editor(st.session_state.df_sintomas, use_container_width=True, num_rows="dynamic", disabled=False, hide_index = True)
         
@@ -161,7 +161,7 @@ if 'email' in st.session_state:
     
     if 'tabla' in st.session_state:
         st.write("---")
-        st.write("## 5) Proceso diagnóstico finalizado")
+        st.write("### 3) Proceso diagnóstico finalizado")
         st.markdown(st.session_state.tabla.to_markdown(index=False), unsafe_allow_html=True)
         
         if st.button(label = "Descargar informe", type = "primary"):
