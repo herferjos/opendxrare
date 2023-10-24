@@ -19,11 +19,11 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 
 from io import BytesIO
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, PageBreak, Paragraph, Table, TableStyle
+from reportlab.lib.pagesizes import A4, landscape
+from reportlab.lib.units import inch
 from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet
-
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, PageBreak
 
 # DEFINIMOS TODAS LAS FUNCIONES NECESARIAS
 def generar_informe(df_list, names, header, text1):
