@@ -15,6 +15,28 @@ from st_paywall import add_auth
 from streamlit_option_menu import option_menu
 
 # DEFINIMOS TODAS LAS FUNCIONES NECESARIAS
+
+@st.cache_data(show_spinner=False, persist = True)
+def reconstruir_faiss():
+    nombres_partes = ['vector_database/index.faiss.part1',
+     'vector_database/index.faiss.part2',
+     'vector_database/index.faiss.part3',
+     'vector_database/index.faiss.part4',
+     'vector_database/index.faiss.part5',
+     'vector_database/index.faiss.part6',
+     'vector_database/index.faiss.part7']
+    
+    # Abre el archivo faiss en modo escritura binaria
+    with open("index.faiss", "wb") as f_out:
+        # Para cada nombre de parte en la lista de nombres de las partes
+        for nombre_parte in nombres_partes:
+            # Abre el archivo de la parte en modo lectura binaria
+            with open(nombre_parte, "rb") as f_in:
+                # Copia el contenido del archivo de la parte al archivo faiss
+                shutil.copyfileobj(f_in, f_out)
+    
+    return 
+
 @st.cache_data(show_spinner=False, persist = True)
 def chatbot(prompt):
     max_intentos = 3
