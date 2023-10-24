@@ -4,3 +4,4 @@ faiss-cpu
 hugchat
 tabulate
 st-paywall
+streamlit-option-menu
