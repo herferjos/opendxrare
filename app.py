@@ -145,6 +145,7 @@ if 'email' in st.session_state:
         st.session_state['description'] = descripcion
         with st.spinner("Estamos procesando tu petición, puede tardar unos minutos..."):
             st.session_state['df_sintomas'] = orchest(descripcion)
+    st.write(st.session_state.texts_database)
     st.write("---")
     if 'description' in st.session_state:
         st.write("#### Descripción Clínica:")
