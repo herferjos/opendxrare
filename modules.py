@@ -65,10 +65,10 @@ def generar_informe(df_list, names, header, text1):
             style.alignment = 0
             elements.append(Paragraph(names[i + 1], style))
 
-            available_page_width = landscape(A4)[0] + 7 * inch
+            available_page_width = landscape(A4)[0] - 0.5 * inch  # Reducir el ancho disponible por un pequeño margen
             num_cols = len(df.columns)
-            col_widths = [(available_page_width * 0.15) / 2, (available_page_width * 0.25) / 2, (available_page_width * 0.25) / 2] + [
-                (available_page_width * 0.35) / num_cols] * (num_cols - 3)
+            col_width = available_page_width / num_cols  # Ancho igual para todas las columnas
+
             body_text_style = ParagraphStyle(name='BodyText', fontName='Helvetica', fontSize=12)
 
             def create_hyperlink(cell_text, style):
@@ -84,6 +84,8 @@ def generar_informe(df_list, names, header, text1):
                 else:
                     return [Paragraph(cell_text, style)]
 
+            # Crear una lista de columnas con el ancho igual para todas
+            column_widths = [col_width] * num_cols
             table_data = [[create_hyperlink(f'{col}', body_text_style) for col in df.columns]] + [
                 [create_hyperlink(f'{col}', body_text_style) for col in row] for row in df.values]
 
@@ -100,16 +102,9 @@ def generar_informe(df_list, names, header, text1):
                 ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
                 ('FONTSIZE', (0, 1), (-1, -1), 12),
                 ('BOTTOMPADDING', (0, -1), (-1, -1), 12),
-                ('GRID', (0, 0), (-1, -1), 1, colors.black),
-                ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-                ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-                ('LEFTPADDING', (0, 0), (-1, -1), 3),
-                ('RIGHTPADDING', (0, 0), (-1, -1), 3),
-                ('TOPPADDING', (0, 0), (-1, -1), 3),
-                ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
             ])
 
-            table = Table(table_data, colWidths=col_widths)
+            table = Table(table_data, colWidths=column_widths)
             table.setStyle(table_style)
 
             elements.append(table)
