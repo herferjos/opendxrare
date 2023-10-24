@@ -47,10 +47,10 @@ st.markdown(
 )
 st.write("---")
 
-st.markdown("<h3 style='text-align: center;'>¡Bienvenidos a la plataforma DxRare!</h4>", unsafe_allow_html=True)
-st.markdown("""<h5 style='text-align: justify;'>
-      Esta iniciativa pretende <b>revolucionar la forma en que se diagnostican las enfermedades genéticas.</b> 
-  </h5>""", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center;'>¡Bienvenidos a la plataforma DxRare!</h3>", unsafe_allow_html=True)
+st.markdown("<h5 style='text-align: center;'>Esta iniciativa pretende revolucionar la forma en que se diagnostican las enfermedades genéticas.</h5>", unsafe_allow_html=True)
+st.markdown("<h5 style='text-align: center;'>Sabemos lo difícil que es para los profesionales de la salud ofrecer un diagnóstico preciso y rápido a pacientes con patologías genéticas, ¡por eso hemos creado DxRare!</h5>", unsafe_allow_html=True)
+
 st.markdown("""<h5 style='text-align: justify;'>
       Sabemos lo difícil que es para los profesionales de la salud ofrecer un diagnóstico preciso y rápido a pacientes con patologías genéticas. 
   </h5>""", unsafe_allow_html=True)
