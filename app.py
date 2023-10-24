@@ -14,6 +14,7 @@ import glob
 import tabulate
 import time
 from st_paywall import add_auth
+from streamlit_option_menu import option_menu
 
 # INICIAMOS TODAS LAS VARIABLES ESTÁTICAS NECESARIAS
 
@@ -248,6 +249,15 @@ def orchest(description):
 # ----------------------------------------------- FRONTED STREAMLIT APP ------------------------------------------------------------------------------------
 
 st.set_page_config(page_title="OpenDxRare", page_icon="🧬", layout="wide")
+
+with st.sidebar:
+   selectec = option_menu(
+      menu_title = "DxRare",
+      options=["Home", "Diagnose", "Terms and conditions"],
+      icons=["house", "clipboard", "file-text-fill"],
+      menu_icon = "cast",
+      default_index = 0,
+   )
 
 st.markdown(
   """
