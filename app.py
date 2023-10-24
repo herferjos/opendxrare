@@ -20,8 +20,6 @@ from modules import chatbot, extractor, search_database, selector, jsoner, get_r
 if 'index_database' not in st.session_state:
     reconstruir_faiss()
     st.session_state['index_database'] = faiss.read_index("index.faiss")
-    if os.path.exists("index.faiss"):
-        os.remove("index.faiss")
 
 if 'texts_database' not in st.session_state:
     with open('vector_database/texts.pkl', 'rb') as f:
