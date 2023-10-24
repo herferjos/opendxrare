@@ -12,7 +12,6 @@ import glob
 import tabulate
 import time
 import shutil
-from st_paywall import add_auth
 from streamlit_option_menu import option_menu
 
 # DEFINIMOS TODAS LAS FUNCIONES NECESARIAS
