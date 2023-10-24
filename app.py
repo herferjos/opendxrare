@@ -171,11 +171,11 @@ if 'email' in st.session_state:
             informe_pdf = generar_informe(st.session_state.description,st.session_state.df_sintomas, caso_clinico_txt, st.session_state.tabla)
             enviar_informe_diagnostico(nombre_caso, st.session_state.email, informe_pdf)
             st.download_button(
-                        label="Descargar archivo TXT",
-                        data=caso_clinico_txt,
-                        file_name=f"configuracion_caso_clinico_{nombre_caso}.txt",
-                        mime="text/plain",
-            )            
+                label="Descargar informe",
+                data=informe_pdf,
+                file_name=f'informe_{nombre_caso}.pdf',
+                mime="application/pdf"
+            )      
 
 else:
     st.markdown("<h3 style='text-align: center;'>⛔Acceso Denegado⛔</h3>", unsafe_allow_html=True)
