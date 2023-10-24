@@ -172,7 +172,7 @@ if 'email' in st.session_state:
             st.download_button(
                         label="Descargar archivo TXT",
                         data=caso_clinico_txt,
-                        file_name=f"configuracion_caso_clinico_{nombre_caso}.txt",
+                        file_name="configuracion_caso_clinico_demo_1.txt",
                         mime="text/plain",
             )
 else:
