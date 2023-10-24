@@ -228,8 +228,8 @@ def orchest(description):
     lista_codigo_sintomas = []
     lista_nombre_sintomas = []
 
-    for sintoma in lista_sintomas_english:
-        respuesta2 = selector(search_database(sintoma), sintoma)
+    for sintoma_en, sintoma_original in zip(lista_sintomas_english, lista_sintomas_original):
+        respuesta2 = selector(search_database(sintoma_en), sintoma_original)
         diccionario_sintoma = jsoner(respuesta2, '{"ID": ..., "Name": ...}')
         codigo_sintoma = diccionario_sintoma["ID"]
         nombre_sintoma = diccionario_sintoma["Name"]
