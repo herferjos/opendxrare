@@ -12,6 +12,7 @@ import glob
 import tabulate
 import time
 import shutil
+import re
 
 import smtplib
 from email.mime.text import MIMEText
