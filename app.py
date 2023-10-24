@@ -155,7 +155,7 @@ if 'email' in st.session_state:
         st.write('## 2) Fenotipos encontrados')
         st.info("Selecciona de la lista proporcionada los fenotipos que deseas añadir al proceso de diagnóstico")
         st.data_editor(st.session_state.df_sintomas, use_container_width=True, num_rows="dynamic", disabled=False)
-        st.write(st.session_state.df_sintomas.to_dict())
+        print(st.session_state.df_sintomas.to_dict())
         
         if st.button(label = "Diagnosticar Síntomas", type = "primary"):
             with st.spinner("Estamos procesando tu petición, puede tardar unos minutos..."):
@@ -166,7 +166,7 @@ if 'email' in st.session_state:
     if 'tabla' in st.session_state:
         st.write("---")
         st.write("## 5) Proceso diagnóstico finalizado")
-        st.write(st.session_state.tabla.to_dict())
+        print(st.session_state.tabla.to_dict())
         st.markdown(st.session_state.tabla.to_markdown(index=False), unsafe_allow_html=True)
 else:
     st.markdown("<h3 style='text-align: center;'>⛔Acceso Denegado⛔</h3>", unsafe_allow_html=True)
