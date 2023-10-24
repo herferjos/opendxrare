@@ -26,6 +26,7 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus.paragraph import Paragraph
 from reportlab.platypus import Table, TableStyle
+from reportlab.lib.units import inch
 
 # DEFINIMOS TODAS LAS FUNCIONES NECESARIAS
 
