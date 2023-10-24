@@ -89,8 +89,6 @@ def search_database(query):
 
     # Buscar los vectores más similares al vector de consulta usando faiss como antes
     distances, indices = st.session_state.index_database.search(np.array([query_vector]), k)
-    print(distances)
-    print(indices)
 
     # Obtener los ID y Texts correspondientes a los vectores encontrados con mayor similaridad al texto de input usando ids_texts como antes
     results = []
