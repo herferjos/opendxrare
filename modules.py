@@ -18,18 +18,56 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, PageBreak, Paragraph, Table, TableStyle
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+
+
 # DEFINIMOS TODAS LAS FUNCIONES NECESARIAS
+@st.cache_data(show_spinner=False, persist=True)
+def generar_informe(string1, tabla1, string2, tabla2):
+    # Crear un objeto PDF
+    pdf_file = "informe.pdf"
+    doc = SimpleDocTemplate(pdf_file, pagesize=letter)
+    story = []
+
+    # Definir estilos para los títulos y el contenido
+    styles = getSampleStyleSheet()
+    estilo_titulo = styles["Title"]
+    estilo_contenido = styles["Normal"]
+
+    # Agregar títulos y contenido al PDF
+    story.append(Paragraph("Descripción Clínica:", estilo_titulo))
+    story.append(Paragraph(string1, estilo_contenido))
+    story.append(PageBreak())
+
+    story.append(Paragraph("Síntomas encontrados:", estilo_titulo))
+    story.append(Table(tabla1))
+    story.append(PageBreak())
+
+    story.append(Paragraph("Diagnósticos posibles:", estilo_titulo))
+    story.append(Table(tabla2))
+    story.append(PageBreak())
+
+    # Crear una nueva página para el cuarto título
+    story.append(PageBreak())
+    story.append(Paragraph("Codificación:", estilo_titulo))
+    story.append(Paragraph(string2, estilo_contenido))
+
+    # Construir el PDF
+    doc.build(story)
 
 @st.cache_data(show_spinner=False, persist=True)
-def enviar_informe_diagnostico(caso_clinico, destinatario_final, archivo_pdf_data, archivo_txt_data):
+def enviar_informe_diagnostico(caso_clinico, destinatario_final, archivo_pdf_data):
     # Configurar los detalles del servidor SMTP de Gmail
-    smtp_host = 'smtp.gmail.com'
+    smtp_host = 'smtp.hostinger.com'
     smtp_port = 465  # Use port 465 for SMTP_SSL
-    smtp_username = 'dxrare.ai@gmail.com'
+    smtp_username = 'contacto@dxrare.com'
     smtp_password = st.secrets["email_pass"]
 
     # Configurar los detalles del mensaje
-    sender = 'dxrare.ai@gmail.com'
+    sender = 'contacto@dxrare.com'
     recipients = [destinatario_final]  # Lista de destinatarios sin el usuario SMTP
     subject = 'Tu informe diagnóstico disponible'
     message = f"""Gracias por confiar en DxRare para tus diagnósticos clínicos. Adjunto en el propio email, podrás encontrar el informe con toda la información sobre el caso clínico que describiste: {caso_clinico}\nEl archivo pdf contiene tablas interactivas con enlaces a las bases de datos más utilizadas.\n\nPor otro lado, el archivo de texto (.txt) contiene información encriptada que nos permitirá retomar el proceso diagnóstico en futuras ocasiones.\n\nSimplemente si quieres continuar con dicho paciente, entra en analisisgenetico.es y sube el archivo .txt en el apartado 'Diagnóstico' y todo volverá como estaba.\n\n¡Te esperamos pronto en la plataforma DxRare!\n\nSaludos,\nEquipo DxRare"""
@@ -46,11 +84,6 @@ def enviar_informe_diagnostico(caso_clinico, destinatario_final, archivo_pdf_dat
     attachment_pdf.add_header('Content-Disposition', 'attachment', filename=f'informe_{caso_clinico}.pdf')
     msg.attach(attachment_pdf)
 
-    # Adjuntar el archivo TXT
-    attachment_txt = MIMEApplication(archivo_txt_data, _subtype="txt")
-    attachment_txt.add_header('Content-Disposition', 'attachment', filename=f'configuracion_caso_clinico_{caso_clinico}.txt')
-    msg.attach(attachment_txt)
-
     # Iniciar la conexión SMTP con SMTP_SSL
     with smtplib.SMTP_SSL(smtp_host, smtp_port) as server:
         # Iniciar sesión en la cuenta de correo
@@ -62,14 +95,14 @@ def enviar_informe_diagnostico(caso_clinico, destinatario_final, archivo_pdf_dat
 @st.cache_data(show_spinner=False, persist=True)
 def enviar_info_usuario(email):
     # Configurar los detalles del servidor SMTP de Gmail
-    smtp_host = 'smtp.gmail.com'
+    smtp_host = 'smtp.hostinger.com'
     smtp_port = 465  # Use port 465 for SMTP_SSL
-    smtp_username = 'dxrare.ai@gmail.com'
+    smtp_username = 'contacto@dxrare.com'
     smtp_password = st.secrets["email_pass"]
 
     # Configurar los detalles del mensaje
-    sender = 'dxrare.ai@gmail.com'
-    recipients = ['dxrare.ai@gmail.com', "jluis.hernandezfernandez@gmail.com"]  # Lista de destinatarios
+    sender = 'contacto@dxrare.com'
+    recipients = ['contacto@dxrare.com', "jluis.hernandezfernandez@gmail.com"]  # Lista de destinatarios
     subject = 'Nuevo Registro en DxRare'
     message = f"""
     Nuevo registro en DxRare:
