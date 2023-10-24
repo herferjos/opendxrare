@@ -155,7 +155,6 @@ if 'email' in st.session_state:
         st.write('## 2) Fenotipos encontrados')
         st.info("Selecciona de la lista proporcionada los fenotipos que deseas añadir al proceso de diagnóstico")
         st.data_editor(st.session_state.df_sintomas, use_container_width=True, num_rows="dynamic", disabled=False)
-        print(st.session_state.df_sintomas.to_dict())
         
         if st.button(label = "Diagnosticar Síntomas", type = "primary"):
             with st.spinner("Estamos procesando tu petición, puede tardar unos minutos..."):
@@ -166,8 +165,16 @@ if 'email' in st.session_state:
     if 'tabla' in st.session_state:
         st.write("---")
         st.write("## 5) Proceso diagnóstico finalizado")
-        print(st.session_state.tabla.to_dict())
         st.markdown(st.session_state.tabla.to_markdown(index=False), unsafe_allow_html=True)
+        
+        if st.button(label = "Descargar informe", type = "primary"):
+            caso_clinico_txt = f"st.session_state['description'] = '''{st.session_state.description}'''\n" + f"st.session_state['df_sintomas'] = pd.DataFrame({st.session_state.df_sintomas.to_dict()})\n" + f"st.session_state['tabla'] = pd.DataFrame({st.session_state.tabla.to_dict()})\n"
+            st.download_button(
+                        label="Descargar archivo TXT",
+                        data=caso_clinico_txt,
+                        file_name=f"configuracion_caso_clinico_{nombre_caso}.txt",
+                        mime="text/plain",
+            )
 else:
     st.markdown("<h3 style='text-align: center;'>⛔Acceso Denegado⛔</h3>", unsafe_allow_html=True)
     st.error("Debes Iniciar Sesión en la primera página para poder continuar...")
