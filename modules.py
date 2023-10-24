@@ -75,9 +75,9 @@ def extractor(caso_clinico):
 
     FORMATO RESPUESTA:
 
-    python dictionary -> {"symptoms":[]}
+    python dictionary -> {"original_symptoms": [], "symptoms_english":[]}
 
-    ¡Recuerda extraer los síntomas médicos de la descripcion clínica proporcionada anteriormente y SOLO contestar con el diccionario en python para lo síntomas, nada más!
+    ¡Recuerda extraer los síntomas médicos de la descripcion clínica proporcionada anteriormente y SOLO contestar con el diccionario en python para lo síntomas, nada más! Ten en cuenta que la descripción clínica puede estar en varios idiomas pero tu debes siempre responder con un listado en inglés y en el idioma original
     '''
     
     return chatbot(prompt)
@@ -120,7 +120,7 @@ def selector(respuesta_database, sintoma):
     prompt = prompt + f"""Esta es la descripción del síntoma proporcionada: '{sintoma}'
 
     Esta son las posibilidades que he encontrado: {respuesta_database}
-    ¡Recuerda SOLO contestar con el FORMATO de JSON en python, nada más!
+    ¡Recuerda SOLO contestar con el FORMATO de JSON en python, nada más! Recuerda contestar la columna "Name" en el idioma original del síntoma proporcionado.
     """
     return chatbot(prompt)
     
@@ -221,13 +221,14 @@ def get_ranked_list(hpo_ids):
 @st.cache_data(show_spinner=False, persist = True)
 def orchest(description):
     respuesta = extractor(description)
-    diccionario = jsoner(respuesta,'{"symptoms":[]}')
-    lista_sintomas = diccionario['symptoms']
+    diccionario = jsoner(respuesta,'{"original_symptoms": [], "symptoms_english":[]}')
+    lista_sintomas_english = diccionario['symptoms_english']
+    lista_sintomas_original = diccionario['original_symptoms']
 
     lista_codigo_sintomas = []
     lista_nombre_sintomas = []
 
-    for sintoma in lista_sintomas:
+    for sintoma in lista_sintomas_english:
         respuesta2 = selector(search_database(sintoma), sintoma)
         diccionario_sintoma = jsoner(respuesta2, '{"ID": ..., "Name": ...}')
         codigo_sintoma = diccionario_sintoma["ID"]
@@ -235,6 +236,6 @@ def orchest(description):
         lista_codigo_sintomas.append(codigo_sintoma)
         lista_nombre_sintomas.append(nombre_sintoma)
 
-    df = pd.DataFrame({"Original Symptom": lista_sintomas, "ID": lista_codigo_sintomas, "Name HPO ID": lista_nombre_sintomas})
+    df = pd.DataFrame({"Original Symptom": lista_sintomas_original, "ID": lista_codigo_sintomas, "Name HPO ID": lista_nombre_sintomas})
     df['Original Symptom'] = df['Original Symptom'].str.capitalize()
     return df
