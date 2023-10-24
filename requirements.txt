@@ -3,4 +3,4 @@ sentence-transformers
 faiss-cpu
 hugchat
 tabulate
-streamlit-option-menu
+reportlab
