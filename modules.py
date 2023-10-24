@@ -18,6 +18,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 
+from io import BytesIO
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, PageBreak, Paragraph, Table, TableStyle
 from reportlab.lib import colors
@@ -27,11 +28,11 @@ from reportlab.lib.styles import getSampleStyleSheet
 # DEFINIMOS TODAS LAS FUNCIONES NECESARIAS
 @st.cache_data(show_spinner=False, persist=True)
 def generar_informe(string1, tabla1, string2, tabla2):
-    # Crear un objeto PDF
-    pdf_file = "informe.pdf"
-    doc = SimpleDocTemplate(pdf_file, pagesize=letter)
+    # Crear un objeto PDF en un buffer de bytes
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter)
     story = []
-
+    
     # Definir estilos para los títulos y el contenido
     styles = getSampleStyleSheet()
     estilo_titulo = styles["Title"]
@@ -57,6 +58,10 @@ def generar_informe(string1, tabla1, string2, tabla2):
 
     # Construir el PDF
     doc.build(story)
+    
+    # Devolver el buffer
+    buffer.seek(0)
+    return buffer
 
 @st.cache_data(show_spinner=False, persist=True)
 def enviar_informe_diagnostico(caso_clinico, destinatario_final, archivo_pdf_data):
