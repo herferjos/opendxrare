@@ -13,7 +13,6 @@ import glob
 import tabulate
 import time
 import re
-from streamlit_option_menu import option_menu
 from modules import chatbot, extractor, search_database, selector, jsoner, get_ranked_list, orchest, reconstruir_faiss, enviar_informe_diagnostico, enviar_info_usuario, generar_informe
 
 # INICIAMOS TODAS LAS VARIABLES ESTÁTICAS NECESARIAS
