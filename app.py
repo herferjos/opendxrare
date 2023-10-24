@@ -163,7 +163,7 @@ if 'email' in st.session_state:
         st.warning("Si deseas guardar el fenotipado realizado mediante inteligencia artificial del caso clínico descrito para posteriores ocasiones, introduce un identificador útil para ti")
         
         nombre_caso = st.text_input(label='Identificador del caso clínico',placeholder="Escribe un identificador para el caso...")
-        if nombre_caso:
+        if st.button(label = "Generar informe", type = "primary") and nombre_caso:
             caso_clinico_txt = f"st.session_state['description'] = '''{st.session_state.description}'''\n" + f"st.session_state['df_sintomas'] = pd.DataFrame({st.session_state.df_sintomas.to_dict()})\n" + f"st.session_state['tabla'] = pd.DataFrame({st.session_state.tabla.to_dict()})\n"
             informe_pdf = generar_informe(st.session_state.description,st.session_state.df_sintomas, st.session_state.tabla, caso_clinico_txt)
             enviar_informe_diagnostico(nombre_caso, st.session_state.email, informe_pdf)
