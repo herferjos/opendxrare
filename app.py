@@ -132,7 +132,6 @@ with st.expander("¿Cómo funciona la plataforma?"):
     st.video("https://youtu.be/6owq8uIESqA")
     
 st.write("---")
-st.session_state['email'] = "jeje"
 
 if 'email' in st.session_state:
     st.write("## 1) Introduce la descripción clínica de tu paciente")
