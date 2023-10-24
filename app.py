@@ -161,6 +161,7 @@ if 'email' in st.session_state:
     if 'tabla' in st.session_state:
         st.write("---")
         st.write("### 3) Proceso diagnóstico finalizado")
+        st.info("Aquí encontrarás un listado de posibles enfermedades ordenadas por su puntuación junto a otra información de interés y enlaces.")
         st.markdown(st.session_state.tabla.to_markdown(index=False), unsafe_allow_html=True)
 
         st.write("### 4) Descargar la información obtenida")
