@@ -28,6 +28,10 @@ from reportlab.lib.styles import getSampleStyleSheet
 # DEFINIMOS TODAS LAS FUNCIONES NECESARIAS
 
 def generar_informe(string1, tabla1, string2, tabla2):
+    # Convertir DataFrames a listas de listas para las tablas
+    tabla1 = [list(df1.columns)] + df1.values.tolist()
+    tabla2 = [list(df2.columns)] + df2.values.tolist()
+    
     # Crear un objeto PDF en un buffer de bytes
     buffer = BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=letter)
