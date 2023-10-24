@@ -20,18 +20,20 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 
 from io import BytesIO
-from reportlab.lib.pagesizes import A4, landscape
-from reportlab.lib.units import inch
+from reportlab.lib.pagesizes import landscape, A4
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, Spacer
 from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, PageBreak
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus.paragraph import Paragraph
+from reportlab.platypus import Table, TableStyle
 
 # DEFINIMOS TODAS LAS FUNCIONES NECESARIAS
+
 def generar_informe(df_list, names, header, text1):
     buffer = BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=landscape(A4))
     elements = []
-    
+
     # Add header as a larger header at the beginning of the PDF
     header_style = getSampleStyleSheet()['Heading1']
     header_style.fontSize = 24  # Bigger font size
@@ -45,7 +47,7 @@ def generar_informe(df_list, names, header, text1):
     text1_name_style.alignment = 0  # left alignment
     elements.append(Paragraph(names[0], text1_name_style))
     elements.append(Spacer(0.2 * inch, 0.2 * inch))  # Add space after the text1 name
-    
+
     # Add text1 as a paragraph after the text1 name
     text1_style = getSampleStyleSheet()['Normal']
     text1_style.fontSize = 12
@@ -61,16 +63,17 @@ def generar_informe(df_list, names, header, text1):
 
             style = getSampleStyleSheet()['Heading2']
             style.alignment = 0
-            elements.append(Paragraph(names[i+1], style))
+            elements.append(Paragraph(names[i + 1], style))
 
             available_page_width = landscape(A4)[0] + 7 * inch
             num_cols = len(df.columns)
-            col_widths = [(available_page_width * 0.15) / 2, (available_page_width * 0.25) / 2, (available_page_width * 0.25) / 2] + [(available_page_width * 0.35) / num_cols] * (num_cols - 3)
+            col_widths = [(available_page_width * 0.15) / 2, (available_page_width * 0.25) / 2, (available_page_width * 0.25) / 2] + [
+                (available_page_width * 0.35) / num_cols] * (num_cols - 3)
             body_text_style = ParagraphStyle(name='BodyText', fontName='Helvetica', fontSize=12)
 
-            def create_hyperlink(cell_text, style):  
+            def create_hyperlink(cell_text, style):
                 links = re.findall(r'\[([^\]]+)\]\(([^)]+)\)', cell_text)
-            
+
                 # Si se encontraron enlaces, crear un párrafo con todos los enlaces
                 if links:
                     paragraphs = []
@@ -81,13 +84,33 @@ def generar_informe(df_list, names, header, text1):
                 else:
                     return [Paragraph(cell_text, style)]
 
-            table_data = [[create_hyperlink(f'{col}', body_text_style) for col in df.columns]] + [[create_hyperlink(f'{col}', body_text_style) for col in row] for row in df.values]
-            table = Table(table_data, colWidths=col_widths)
+            table_data = [[create_hyperlink(f'{col}', body_text_style) for col in df.columns]] + [
+                [create_hyperlink(f'{col}', body_text_style) for col in row] for row in df.values]
 
-            style = TableStyle([
-                # Your table style here
+            # Crear un estilo de tabla con bordes
+            table_style = TableStyle([
+                ('GRID', (0, 0), (-1, -1), 1, colors.black),
+                ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
+                ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+                ('FONTSIZE', (0, 1), (-1, -1), 12),
+                ('BOTTOMPADDING', (0, -1), (-1, -1), 12),
+                ('GRID', (0, 0), (-1, -1), 1, colors.black),
+                ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                ('LEFTPADDING', (0, 0), (-1, -1), 3),
+                ('RIGHTPADDING', (0, 0), (-1, -1), 3),
+                ('TOPPADDING', (0, 0), (-1, -1), 3),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
             ])
-            table.setStyle(style)
+
+            table = Table(table_data, colWidths=col_widths)
+            table.setStyle(table_style)
 
             elements.append(table)
             elements.append(Spacer(0.1 * inch, 0.4 * inch))
