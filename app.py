@@ -13,7 +13,7 @@ import glob
 import tabulate
 import time
 import re
-from modules import chatbot, extractor, search_database, selector, jsoner, get_ranked_list, orchest, reconstruir_faiss, enviar_informe_diagnostico, enviar_info_usuario, generar_informe
+from modules import chatbot, extractor, search_database, selector, jsoner, get_ranked_list, orchest, reconstruir_faiss, enviar_informe_diagnostico, enviar_info_usuario, generar_informe, enviar_email_seguimiento
 
 # INICIAMOS TODAS LAS VARIABLES ESTÁTICAS NECESARIAS
 
@@ -119,6 +119,7 @@ else:
                 st.experimental_rerun()
             else:
                 enviar_info_usuario(email)
+                enviar_email_seguimiento(email)
                 st.experimental_rerun()
           else:
               st.warning("Por favor, introduce un email válido y acepta los términos y condiciones")
