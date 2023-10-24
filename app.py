@@ -14,28 +14,20 @@ import tabulate
 import time
 from st_paywall import add_auth
 from streamlit_option_menu import option_menu
-from modules import chatbot, extractor, search_database, selector, jsoner, get_ranked_list, orchest
+from modules import chatbot, extractor, search_database, selector, jsoner, get_ranked_list, orchest, reconstruir_faiss
 
 # INICIAMOS TODAS LAS VARIABLES ESTÁTICAS NECESARIAS
 
-if 'model' not in st.session_state:
-    st.session_state['model'] = SentenceTransformer('joseluhf11/symptom_encoder')
-
 if 'index_database' not in st.session_state:
-
-    with open("index.faiss", 'wb') as f:
-        for root, _, files in os.walk("vector_database/"):
-            for file_name in sorted(files):
-                file_path = os.path.join(root, file_name)
-                with open(file_path, 'rb') as chunk_file:
-                    chunk = chunk_file.read()
-                    f.write(chunk)
-
+    reconstruir_faiss()
     st.session_state['index_database'] = faiss.read_index("index.faiss")
 
 if 'texts_database' not in st.session_state:
     with open('vector_database/texts.pkl', 'rb') as f:
         st.session_state['texts_database'] = pickle.load(f)
+
+if 'model' not in st.session_state:
+    st.session_state['model'] = SentenceTransformer('joseluhf11/symptom_encoder_v10')
 
 if 'chatbot' not in st.session_state:
     st.session_state['chatbot'] = hugchat.ChatBot(cookie_path='hugchat_cookies.json')
