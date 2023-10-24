@@ -26,6 +26,70 @@ from reportlab.lib.styles import getSampleStyleSheet
 
 
 # DEFINIMOS TODAS LAS FUNCIONES NECESARIAS
+def generar_informe(df_list, names, header, text1):
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=landscape(A4))
+    elements = []
+
+    # Add text1 at the beginning
+    text1_style = getSampleStyleSheet()['Normal']
+    text1_style.fontSize = 12
+    elements.append(Paragraph(text1, text1_style))
+    elements.append(Spacer(0.1 * inch, 0.4 * inch))  # Add space after text1
+
+    for i, df in enumerate(df_list):
+        if df.empty:
+            continue
+        else:
+            df = df.dropna(axis=1, how='all')
+            df = df.loc[:, (df.applymap(lambda x: bool(str(x).strip())).any(axis=0)]
+
+            style = getSampleStyleSheet()['Heading2']
+            style.alignment = 0
+            elements.append(Paragraph(names[i], style))
+
+            available_page_width = landscape(A4)[0] + 7 * inch
+            num_cols = len(df.columns)
+            col_widths = [(available_page_width * 0.15) / 2, (available_page_width * 0.25) / 2, (available_page_width * 0.25) / 2] + [(available_page_width * 0.35) / num_cols] * (num_cols - 3)
+            body_text_style = ParagraphStyle(name='BodyText', fontName='Helvetica', fontSize=12)
+
+            def create_hyperlink(cell_text, style):  
+                links = re.findall(r'\[([^\]]+)\]\(([^)]+)\)', cell_text)
+            
+                # Si se encontraron enlaces, crear un párrafo con todos los enlaces
+                if links:
+                    paragraphs = []
+                    for label, url in links:
+                        link = f'<a href="{url}">{label}</a>'
+                        paragraphs.append(Paragraph(link, style))
+                    return paragraphs
+                else:
+                    return [Paragraph(cell_text, style)]
+
+            table_data = [[create_hyperlink(f'{col}', body_text_style) for col in df.columns]] + [[create_hyperlink(f'{col}', body_text_style) for col in row] for row in df.values]
+            table = Table(table_data, colWidths=col_widths)
+
+            style = TableStyle([
+                # Your table style here
+            ])
+            table.setStyle(style)
+
+            elements.append(table)
+            elements.append(Spacer(0.1 * inch, 0.4 * inch))
+
+    # Add text2 after tables
+    text2_style = getSampleStyleSheet()['Normal']
+    text2_style.fontSize = 12
+    text2_paragraphs = text2.split('\n')
+    for paragraph in text2_paragraphs:
+        elements.append(Paragraph(paragraph, text2_style))
+        elements.append(Spacer(0.1 * inch, 0.4 * inch))
+
+    doc.build(elements)
+
+    buffer.seek(0)
+    return buffer
+
 
 def generar_informe(string1, df1, string2, df2):
     # Convertir DataFrames a listas de listas para las tablas
