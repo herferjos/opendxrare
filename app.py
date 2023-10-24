@@ -63,14 +63,14 @@ with st.sidebar:
       default_index = 0,
    )
 
-if select == "Inicio":
+if selectec == "Inicio":
     st.markdown("<h4 style='text-align: center;'>¡Bienvenidos a la plataforma DxRare!</h4>", unsafe_allow_html=True)
     st.write("---")
     st.write("## ¿Cómo funciona la plataforma?")
     st.video("https://youtu.be/6owq8uIESqA")
         
     
-if select == "Diangóstico":
+if selectec == "Diangóstico":
 
     descripcion = st.text_area(label = "Clinical Description")
     
