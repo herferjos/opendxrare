@@ -176,7 +176,13 @@ if 'email' in st.session_state:
                 data=informe_pdf,
                 file_name=f'informe_{nombre_caso}.pdf',
                 mime="application/pdf"
-            )      
+            )
+            st.download_button(
+                label="Descargar archivo TXT",
+                data=caso_clinico_txt,
+                file_name=f"configuracion_caso_clinico_{nombre_caso}.txt",
+                mime="text/plain",
+            )
 
 else:
     st.markdown("<h3 style='text-align: center;'>⛔Acceso Denegado⛔</h3>", unsafe_allow_html=True)
