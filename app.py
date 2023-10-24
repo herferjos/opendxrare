@@ -58,7 +58,7 @@ if 'email' in st.session_state:
         with open('demo_1.txt', "r",encoding="utf-8") as archivo:
           content = archivo.read()
         exec(content)
-        st.experimental_rerun()
+        st.rerun()
         st.success("Información clínica cargada correctamente")
 
     with columnas2:
@@ -68,7 +68,7 @@ if 'email' in st.session_state:
         with open('demo_2.txt', "r", encoding="utf-8") as archivo:
           content = archivo.read()
         exec(content)
-        st.experimental_rerun()
+        st.rerun()
         st.success("Información clínica cargada correctamente")
 else:
     st.write("### Comienza a diagnosticar")
@@ -116,11 +116,11 @@ else:
             st.session_state['consentimiento'] = True
             st.session_state['email'] = email
             if email == "prueba@gmail.com":
-                st.experimental_rerun()
+                st.rerun()
             else:
                 enviar_info_usuario(email)
                 enviar_email_seguimiento(email)
-                st.experimental_rerun()
+                st.rerun()
           else:
               st.warning("Por favor, introduce un email válido y acepta los términos y condiciones")
 
