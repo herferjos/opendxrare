@@ -88,8 +88,11 @@ def enviar_informe_diagnostico(caso_clinico, destinatario_final, archivo_pdf_dat
     msg['Subject'] = subject
     msg.attach(MIMEText(message, 'plain'))
 
-    # Adjuntar el archivo PDF
-    attachment_pdf = MIMEApplication(archivo_pdf_data, _subtype="pdf")
+    # Obtener los bytes del objeto BytesIO
+    archivo_pdf_bytes = archivo_pdf_data.getvalue()
+    
+    # Crear el objeto MIME para el archivo PDF
+    attachment_pdf = MIMEApplication(archivo_pdf_bytes, _subtype="pdf")
     attachment_pdf.add_header('Content-Disposition', 'attachment', filename=f'informe_{caso_clinico}.pdf')
     msg.attach(attachment_pdf)
 
