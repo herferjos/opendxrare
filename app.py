@@ -45,41 +45,58 @@ if 'chatbot' not in st.session_state:
 
 st.set_page_config(page_title="OpenDxRare", page_icon="🧬", layout="wide")
 
-with st.sidebar:
-   selectec = option_menu(
-      menu_title = "DxRare",
-      options=["Home", "Diagnose", "Terms and conditions"],
-      icons=["house", "clipboard", "file-text-fill"],
-      menu_icon = "cast",
-      default_index = 0,
-   )
-
 st.markdown(
   """
   <div style='text-align: center;'>
       <h1>🧬 DxRare 🧬</h1>
-      <h4>Empowering clinicians in the diagnostic process</h4>
+      <h4>Mejorando el proceso de diagnóstico</h4>
   </div>
   """,
     unsafe_allow_html=True
 )
 st.write("---")
 
+if "email" not in st.session_state:
+    st.warning("Por favor, ingresa con tu cuenta de Google habitual para poder empezar a usar la plataforma")
+
 add_auth(required=True)
 
-descripcion = st.text_area(label = "Clinical Description")
+with st.sidebar:
+   selectec = option_menu(
+      menu_title = "DxRare",
+      options=["Inicio", "Diagnóstico", "Términos y Condiciones"],
+      icons=["house", "clipboard", "file-text-fill"],
+      menu_icon = "cast",
+      default_index = 0,
+   )
 
-if st.button(label = "Extract symptoms", type = "primary"):
-    st.session_state['df_sintomas'] = orchest(descripcion)
-
-if 'df_sintomas' in st.session_state:
-    st.data_editor(st.session_state.df_sintomas, use_container_width=True, num_rows="dynamic", disabled=False)
-    
-    if st.button(label = "Diagnose symptoms", type = "primary"):
-        lista_codigos = st.session_state.df_sintomas["ID"].to_list()
-        tabla, lista_ids = get_ranked_list(lista_codigos)
-        st.session_state['tabla'] = tabla
-
-if 'tabla' in st.session_state:
+if select == "Inicio":
+    st.markdown("<h4 style='text-align: center;'>¡Bienvenidos a la plataforma DxRare!</h4>", unsafe_allow_html=True)
     st.write("---")
-    st.markdown(st.session_state.tabla.to_markdown(index=False), unsafe_allow_html=True)
+    if st.session_state.user_subscribed == True:
+        pass
+    else:
+        st.warning("Por favor, suscríbete para poder empezar a usar la plataforma")
+    st.write("---")
+    st.write("## ¿Cómo funciona la plataforma?")
+    st.video("https://youtu.be/6owq8uIESqA")
+        
+    
+if select == "Diangóstico":
+
+    descripcion = st.text_area(label = "Clinical Description")
+    
+    if st.button(label = "Extract symptoms", type = "primary"):
+        st.session_state['df_sintomas'] = orchest(descripcion)
+    
+    if 'df_sintomas' in st.session_state:
+        st.data_editor(st.session_state.df_sintomas, use_container_width=True, num_rows="dynamic", disabled=False)
+        
+        if st.button(label = "Diagnose symptoms", type = "primary"):
+            lista_codigos = st.session_state.df_sintomas["ID"].to_list()
+            tabla, lista_ids = get_ranked_list(lista_codigos)
+            st.session_state['tabla'] = tabla
+    
+    if 'tabla' in st.session_state:
+        st.write("---")
+        st.markdown(st.session_state.tabla.to_markdown(index=False), unsafe_allow_html=True)
