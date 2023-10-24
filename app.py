@@ -170,18 +170,12 @@ if 'email' in st.session_state:
         if st.button(label = "Generar informe", type = "primary") and nombre_caso:
             caso_clinico_txt = f"st.session_state['description'] = '''{st.session_state.description}'''\n" + f"st.session_state['df_sintomas'] = pd.DataFrame({st.session_state.df_sintomas.to_dict()})\n" + f"st.session_state['tabla'] = pd.DataFrame({st.session_state.tabla.to_dict()})\n"
             informe_pdf = generar_informe([st.session_state.df_sintomas,st.session_state.tabla],["Descripción clínica", "Síntomas encontrados", "Diagnósticos posibles"], f"Caso clínico {nombre_caso}", st.session_state.description)
-            enviar_informe_diagnostico(nombre_caso, st.session_state.email, informe_pdf)
+            enviar_informe_diagnostico(nombre_caso, st.session_state.email, informe_pdf, caso_clinico_txt)
             st.download_button(
                 label="Descargar informe",
                 data=informe_pdf,
                 file_name=f'informe_{nombre_caso}.pdf',
                 mime="application/pdf"
-            )
-            st.download_button(
-                label="Descargar archivo TXT",
-                data=caso_clinico_txt,
-                file_name=f"configuracion_caso_clinico_{nombre_caso}.txt",
-                mime="text/plain",
             )
 
 else:
