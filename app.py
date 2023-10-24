@@ -78,7 +78,8 @@ if 'email' in st.session_state:
       if 'rerun2' in st.session_state:
         st.success("Información clínica cargada correctamente")
 else:
-    st.write("### Comienza a diagnosticar")   
+    st.write("### Comienza a diagnosticar")
+    st.warning("¡Gracias a ti podemos seguir avanzando, déjanos tu email antes de empezar a usar la plataforma para concerte y que nos aportes tu opinión al final de la sesión!
     with st.form(key="formulario"):
         email = st.text_input(label='Email', placeholder="Escribe un email con el que poder contactar")
         with st.expander("Términos y Condiciones"):
