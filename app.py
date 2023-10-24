@@ -152,7 +152,7 @@ if 'email' in st.session_state:
     if 'df_sintomas' in st.session_state:
         st.write('## 2) Fenotipos encontrados')
         st.info("Selecciona de la lista proporcionada los fenotipos que deseas añadir al proceso de diagnóstico")
-        st.data_editor(st.session_state.df_sintomas, use_container_width=True, num_rows="dynamic", disabled=False)
+        st.data_editor(st.session_state.df_sintomas, use_container_width=True, num_rows="dynamic", disabled=False, hide_index = True)
         
         if st.button(label = "Diagnosticar Síntomas", type = "primary"):
             with st.spinner("Estamos procesando tu petición, puede tardar unos minutos..."):
