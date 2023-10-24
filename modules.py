@@ -12,9 +12,84 @@ import glob
 import tabulate
 import time
 import shutil
-from streamlit_option_menu import option_menu
+
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.application import MIMEApplication
 
 # DEFINIMOS TODAS LAS FUNCIONES NECESARIAS
+
+@st.cache_data(show_spinner=False, persist=True)
+def enviar_informe_diagnostico(caso_clinico, destinatario_final, archivo_pdf_data, archivo_txt_data):
+    # Configurar los detalles del servidor SMTP de Gmail
+    smtp_host = 'smtp.gmail.com'
+    smtp_port = 465  # Use port 465 for SMTP_SSL
+    smtp_username = 'dxrare.ai@gmail.com'
+    smtp_password = st.secrets["email_pass"]
+
+    # Configurar los detalles del mensaje
+    sender = 'dxrare.ai@gmail.com'
+    recipients = [destinatario_final]  # Lista de destinatarios sin el usuario SMTP
+    subject = 'Tu informe diagnóstico disponible'
+    message = f"""Gracias por confiar en DxRare para tus diagnósticos clínicos. Adjunto en el propio email, podrás encontrar el informe con toda la información sobre el caso clínico que describiste: {caso_clinico}\nEl archivo pdf contiene tablas interactivas con enlaces a las bases de datos más utilizadas.\n\nPor otro lado, el archivo de texto (.txt) contiene información encriptada que nos permitirá retomar el proceso diagnóstico en futuras ocasiones.\n\nSimplemente si quieres continuar con dicho paciente, entra en analisisgenetico.es y sube el archivo .txt en el apartado 'Diagnóstico' y todo volverá como estaba.\n\n¡Te esperamos pronto en la plataforma DxRare!\n\nSaludos,\nEquipo DxRare"""
+
+    # Crear el objeto MIME para el correo electrónico
+    msg = MIMEMultipart()
+    msg['From'] = sender
+    msg['To'] = ', '.join(recipients)  # Convertir la lista de destinatarios en una cadena separada por comas
+    msg['Subject'] = subject
+    msg.attach(MIMEText(message, 'plain'))
+
+    # Adjuntar el archivo PDF
+    attachment_pdf = MIMEApplication(archivo_pdf_data, _subtype="pdf")
+    attachment_pdf.add_header('Content-Disposition', 'attachment', filename=f'informe_{caso_clinico}.pdf')
+    msg.attach(attachment_pdf)
+
+    # Adjuntar el archivo TXT
+    attachment_txt = MIMEApplication(archivo_txt_data, _subtype="txt")
+    attachment_txt.add_header('Content-Disposition', 'attachment', filename=f'configuracion_caso_clinico_{caso_clinico}.txt')
+    msg.attach(attachment_txt)
+
+    # Iniciar la conexión SMTP con SMTP_SSL
+    with smtplib.SMTP_SSL(smtp_host, smtp_port) as server:
+        # Iniciar sesión en la cuenta de correo
+        server.login(smtp_username, smtp_password)
+
+        # Enviar el correo electrónico
+        server.send_message(msg)
+
+@st.cache_data(show_spinner=False, persist=True)
+def enviar_info_usuario(email):
+    # Configurar los detalles del servidor SMTP de Gmail
+    smtp_host = 'smtp.gmail.com'
+    smtp_port = 465  # Use port 465 for SMTP_SSL
+    smtp_username = 'dxrare.ai@gmail.com'
+    smtp_password = st.secrets["email_pass"]
+
+    # Configurar los detalles del mensaje
+    sender = 'dxrare.ai@gmail.com'
+    recipients = ['dxrare.ai@gmail.com', "jluis.hernandezfernandez@gmail.com"]  # Lista de destinatarios
+    subject = 'Nuevo Registro en DxRare'
+    message = f"""
+    Nuevo registro en DxRare:
+    email = {email}
+    """
+
+    # Crear el objeto MIME para el correo electrónico
+    msg = MIMEMultipart()
+    msg['From'] = sender
+    msg['To'] = ', '.join(recipients)  # Convertir la lista de destinatarios en una cadena separada por comas
+    msg['Subject'] = subject
+    msg.attach(MIMEText(message, 'plain'))
+
+    # Iniciar la conexión SMTP con SMTP_SSL
+    with smtplib.SMTP_SSL(smtp_host, smtp_port) as server:
+        # Iniciar sesión en la cuenta de correo
+        server.login(smtp_username, smtp_password)
+
+        # Enviar el correo electrónico
+        server.send_message(msg)
 
 @st.cache_data(show_spinner=False, persist = True)
 def reconstruir_faiss():
