@@ -168,13 +168,12 @@ def enviar_email_seguimiento(email):
     recipients = [email]  # Lista de destinatarios
     subject = '🧬¡Bienvenido a DxRare!🧬'
     message = f"""
-    Estamos muy contentos de que pruebes DxRare y te sumes a nuestra iniciativa.
-    Por eso estaremos encantados de saber qué opinas sobre la plataforma y si te ha resultado útil.
-    
-    ¡Esperamos con ganas tu feedback!
-    
-    Saludos,
-    Equipo de DxRare
+Estamos muy contentos de que pruebes DxRare y te sumes a nuestra iniciativa.
+Por eso estaremos encantados de saber qué opinas sobre la plataforma y si te ha resultado útil.
+¡Esperamos con ganas tu feedback!
+
+Saludos,
+Equipo de DxRare
     """
 
     # Crear el objeto MIME para el correo electrónico
