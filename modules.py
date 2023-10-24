@@ -56,7 +56,7 @@ def generar_informe(df_list, names, header, text1):
             continue
         else:
             df = df.dropna(axis=1, how='all')
-            df = df.loc[:, (df.applymap(lambda x: bool(str(x).strip())).any(axis=0)]
+            df = df.loc[:, (df.applymap(lambda x: bool(str(x).strip())).any(axis=0))]
 
             style = getSampleStyleSheet()['Heading2']
             style.alignment = 0
