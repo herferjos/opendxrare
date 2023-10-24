@@ -96,48 +96,6 @@ def generar_informe(df_list, names, header, text1):
     buffer.seek(0)
     return buffer
 
-
-def generar_informe(string1, df1, string2, df2):
-    # Convertir DataFrames a listas de listas para las tablas
-    tabla1 = [list(df1.columns)] + df1.values.tolist()
-    tabla2 = [list(df2.columns)] + df2.values.tolist()
-    
-    # Crear un objeto PDF en un buffer de bytes
-    buffer = BytesIO()
-    doc = SimpleDocTemplate(buffer, pagesize=letter)
-    story = []
-    
-    # Definir estilos para los títulos y el contenido
-    styles = getSampleStyleSheet()
-    estilo_titulo = styles["Title"]
-    estilo_contenido = styles["Normal"]
-
-    # Agregar títulos y contenido al PDF
-    story.append(Paragraph("Descripción Clínica:", estilo_titulo))
-    story.append(Paragraph(string1, estilo_contenido))
-    story.append(PageBreak())
-
-    story.append(Paragraph("Síntomas encontrados:", estilo_titulo))
-    story.append(Table(tabla1))
-    story.append(PageBreak())
-
-    story.append(Paragraph("Diagnósticos posibles:", estilo_titulo))
-    story.append(Table(tabla2))
-    story.append(PageBreak())
-
-    # Crear una nueva página para el cuarto título
-    story.append(PageBreak())
-    story.append(Paragraph("Codificación:", estilo_titulo))
-    story.append(Paragraph(string2, estilo_contenido))
-
-    # Construir el PDF
-    doc.build(story)
-    
-    # Devolver el buffer
-    buffer.seek(0)
-    return buffer
-
-
 def enviar_informe_diagnostico(caso_clinico, destinatario_final, archivo_pdf_data):
     # Configurar los detalles del servidor SMTP de Gmail
     smtp_host = 'smtp.hostinger.com'
