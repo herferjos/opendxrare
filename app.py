@@ -127,7 +127,7 @@ else:
 #---------------------------------------------------------------------------------------------------------------------------------------------------
 st.write("### Demo de la plataforma")   
 with st.expander("⬇️ Vídeo ⬇️"):
-    st.video("https://youtu.be/6owq8uIESqA")
+    st.video("https://youtu.be/9XC86eTTWDA")
     
 st.write("---")
 
