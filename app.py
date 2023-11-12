@@ -18,11 +18,11 @@ from modules import chatbot, extractor, search_database, selector, jsoner, get_r
 # INICIAMOS TODAS LAS VARIABLES ESTÁTICAS NECESARIAS
 
 if 'index_database' not in st.session_state:
-    reconstruir_faiss()
+    # reconstruir_faiss()
     st.session_state['index_database'] = faiss.read_index("index.faiss")
 
 if 'texts_database' not in st.session_state:
-    with open('vector_database/texts.pkl', 'rb') as f:
+    with open('texts.pkl', 'rb') as f:
         st.session_state['texts_database'] = pickle.load(f)
 
 if 'model' not in st.session_state:
