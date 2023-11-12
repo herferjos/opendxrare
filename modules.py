@@ -289,7 +289,7 @@ def extractor(caso_clinico):
 
 
 def search_database(query):
-    k = 5
+    k = 20
     query_vector = st.session_state.model.encode(query)
 
     # Buscar los vectores más similares al vector de consulta usando faiss como antes
