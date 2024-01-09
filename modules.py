@@ -27,6 +27,8 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import Table, TableStyle
 from reportlab.lib.units import inch
 
+import concurrent.futures
+
 # DEFINIMOS TODAS LAS FUNCIONES NECESARIAS
 
 def generar_informe(df_list, names, header, text1):
@@ -423,23 +425,23 @@ def get_ranked_list(hpo_ids):
 
     return df, lista_diseases_id
 
-
 def orchest(description):
     respuesta = extractor(description)
-    diccionario = jsoner(respuesta,'{"original_symptoms": [], "symptoms_english":[]}')
+    diccionario = jsoner(respuesta, '{"original_symptoms": [], "symptoms_english":[]}')
     lista_sintomas_english = diccionario['symptoms_english']
     lista_sintomas_original = diccionario['original_symptoms']
 
-    lista_codigo_sintomas = []
-    lista_nombre_sintomas = []
-
-    for sintoma_en, sintoma_original in zip(lista_sintomas_english, lista_sintomas_original):
+    def process_sintoma(sintoma_en, sintoma_original):
         respuesta2 = selector(search_database(sintoma_en), sintoma_original)
         diccionario_sintoma = jsoner(respuesta2, '{"ID": ..., "Name": ...}')
         codigo_sintoma = diccionario_sintoma["ID"]
         nombre_sintoma = diccionario_sintoma["Name"]
-        lista_codigo_sintomas.append(codigo_sintoma)
-        lista_nombre_sintomas.append(nombre_sintoma)
+        return sintoma_original.capitalize(), codigo_sintoma, nombre_sintoma
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        resultados = list(executor.map(lambda args: process_sintoma(*args), zip(lista_sintomas_english, lista_sintomas_original)))
+
+    lista_codigo_sintomas, lista_nombre_sintomas = zip(*resultados)
 
     df = pd.DataFrame({"Síntoma Original": lista_sintomas_original, "ID": lista_codigo_sintomas, "Nombre del ID": lista_nombre_sintomas})
     df['Síntoma Original'] = df['Síntoma Original'].str.capitalize()
