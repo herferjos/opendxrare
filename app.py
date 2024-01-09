@@ -4,6 +4,7 @@ from sentence_transformers import SentenceTransformer
 import faiss
 import pickle
 from hugchat import hugchat
+from hugchat.login import Login
 import numpy as np
 import requests
 import pandas as pd
@@ -29,7 +30,11 @@ if 'model' not in st.session_state:
     st.session_state['model'] = SentenceTransformer('joseluhf11/symptom_encoder_v9')
 
 if 'chatbot' not in st.session_state:
-    st.session_state['chatbot'] = hugchat.ChatBot(cookie_path='hugchat_cookies.json')
+    sign = Login(st.secrets['email'], st.secrets['password'])
+    cookies = sign.login()
+    st.session_state['chatbot'] = hugchat.ChatBot(cookies=cookies.get_dict())
+
+
 
 
 # ----------------------------------------------- FRONTED STREAMLIT APP ------------------------------------------------------------------------------------
